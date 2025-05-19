@@ -15,8 +15,8 @@ int main()
     al_init_ttf_addon();
     al_init_primitives_addon();
 
-    int maxdisplay_w = 800;
-    int maxdisplay_h = 600;
+    int maxdisplay_w = 600;
+    int maxdisplay_h = 400;
 
     ALLEGRO_DISPLAY *disp = al_create_display(maxdisplay_w, maxdisplay_h);
     ALLEGRO_TIMER *timer = al_create_timer(1.0 / 60.0);
@@ -30,7 +30,7 @@ int main()
     int dir = 0; // 0 = baixo, 1 = esquerda, 2 = cima, 3 = direita
     int frame = 0;
     int frame_counter = 0;
-    float x = 600, y = 100;
+    float x = maxdisplay_w / 2, y = maxdisplay_h / 2;
     float speed = 2.0;
     bool keys[ALLEGRO_KEY_MAX] = {0};
     // --------------------------------------------
@@ -61,30 +61,21 @@ int main()
         if (event.type == ALLEGRO_EVENT_TIMER)
         {
             bool moving = false;
-           
+
             movingTestUp(keys[ALLEGRO_KEY_UP], &moving, speed, &dir, &y);
             movingTestDown(keys[ALLEGRO_KEY_DOWN], &moving, speed, &dir, &y);
             movingTestRight(keys[ALLEGRO_KEY_RIGHT], &moving, speed, &dir, &x);
             movingTestLeft(keys[ALLEGRO_KEY_LEFT], &moving, speed, &dir, &x);
 
-            if (keys[ALLEGRO_KEY_LEFT])
-            {
-                x -= speed;
-                dir = 1;
-                moving = true;
-            }
-            if (keys[ALLEGRO_KEY_DOWN])
-            {
-                y += speed;
-                dir = 0;
-                moving = true;
-            }
-            if (keys[ALLEGRO_KEY_RIGHT])
-            {
-                x += speed;
-                dir = 3;
-                moving = true;
-            }
+            // Limita o personagem dentro da tela
+            if (x < 0)
+                x = 0;
+            if (x > maxdisplay_w - SPRITE_W)
+                x = maxdisplay_w - SPRITE_W;
+            if (y < 0)
+                y = 0;
+            if (y > maxdisplay_h - SPRITE_H)
+                y = maxdisplay_h - SPRITE_H;
 
             if (moving)
             {
@@ -102,8 +93,6 @@ int main()
                 {
                     continue;
                 }
-
-                y -= speed / 2;
                 frame = 0; // Parado: usa quadro do meio
             }
             al_clear_to_color(al_map_rgb(0, 0, 0));
