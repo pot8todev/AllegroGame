@@ -62,7 +62,10 @@ int main()
         {
             bool moving = false;
            
-            movingTest(keys[ALLEGRO_KEY_UP], &moving, speed, &dir, &y);
+            movingTestUp(keys[ALLEGRO_KEY_UP], &moving, speed, &dir, &y);
+            movingTestDown(keys[ALLEGRO_KEY_DOWN], &moving, speed, &dir, &y);
+            movingTestRight(keys[ALLEGRO_KEY_RIGHT], &moving, speed, &dir, &x);
+            movingTestLeft(keys[ALLEGRO_KEY_LEFT], &moving, speed, &dir, &x);
 
             if (keys[ALLEGRO_KEY_LEFT])
             {
