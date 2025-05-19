@@ -4,6 +4,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/keyboard.h>
 #include <allegro5/allegro_ttf.h>
+#include "moving.h"
 
 int main()
 {
@@ -14,7 +15,10 @@ int main()
     al_init_ttf_addon();
     al_init_primitives_addon();
 
-    ALLEGRO_DISPLAY *disp = al_create_display(800, 600);
+    int maxdisplay_w = 800;
+    int maxdisplay_h = 600;
+
+    ALLEGRO_DISPLAY *disp = al_create_display(maxdisplay_w, maxdisplay_h);
     ALLEGRO_TIMER *timer = al_create_timer(1.0 / 60.0);
     ALLEGRO_EVENT_QUEUE *queue = al_create_event_queue();
     ALLEGRO_BITMAP *sprite = al_load_bitmap("sprites.png");
@@ -57,12 +61,9 @@ int main()
         if (event.type == ALLEGRO_EVENT_TIMER)
         {
             bool moving = false;
-            if (keys[ALLEGRO_KEY_UP])
-            {
-                y -= speed;
-                dir = 2;
-                moving = true;
-            }
+           
+            movingTest(keys[ALLEGRO_KEY_UP], &moving, speed, &dir, &y);
+
             if (keys[ALLEGRO_KEY_LEFT])
             {
                 x -= speed;
@@ -93,11 +94,12 @@ int main()
             }
             else // Gravidade
             {
-                
+
                 if (x < 0 || y < 0)
                 {
                     continue;
                 }
+
                 y -= speed / 2;
                 frame = 0; // Parado: usa quadro do meio
             }
