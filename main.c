@@ -84,6 +84,7 @@ int main()
             // frame loop
             if (moving)
             {
+                personagem.velocidade = 4;
                 // normalizacao vetor diagonal
                 normalVetor(&personagem.posy, &personagem.posx, &posxi, &posyi);
 
@@ -95,7 +96,7 @@ int main()
                     frame_counter = 0;
                 }
 
-                colision(&wooden_crate_box, &personagem);
+                colision(&wooden_crate_box, &personagem, dir);
 
                 // recebe as novas posicoes
                 posxi = personagem.posx;

@@ -3,32 +3,30 @@
 #include <allegro5/allegro_image.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdbool.h>
 
-void colision(OBJETO *objeto, OBJETO *personagem)
+void colision(OBJETO *objeto, OBJETO *personagem, int dir)
 {
-    float colision_area_Rx = (objeto->posx + (objeto->sprite_w) / 2);
-    float colision_area_Lx = (objeto->posx - (objeto->sprite_w) / 2);
-    float colision_area_Ty = (objeto->posy + (objeto->sprite_h) / 2);
-    float colision_area_By = (objeto->posy - (objeto->sprite_h) / 2);
+    // Retângulo do personagem
+    float person_posx = personagem->posx, person_posy = personagem->posy;
+    float person_w = personagem->sprite_w, person_h = personagem->sprite_h;
 
-    bool vertical_interval = (personagem->posy < colision_area_Ty || personagem->posy > colision_area_By);
-    bool horizontal_interval = (personagem->posx < colision_area_Rx || personagem->posx > colision_area_Lx);
+    // Retângulo da caixa
+    float obj_posx = objeto->posx, obj_posy = objeto->posy;
+    float obj_w = objeto->sprite_w, obj_h = objeto->sprite_h;
 
-    if (((personagem->posx) < colision_area_Rx) && vertical_interval)
+    // Verifica sobreposição
+    if (person_posx < obj_posx + obj_w && person_posx + person_w > obj_posx &&
+        person_posy < obj_posy + obj_h && person_posy + person_h > obj_posy)
     {
-        personagem->posx = colision_area_Rx + personagem->sprite_w;
-    }
-    if (personagem->posx > colision_area_Lx && vertical_interval)
-    {
-        personagem->posx = colision_area_Lx;
-    }
-
-    if (personagem->posy < colision_area_Ty && horizontal_interval)
-    {
-        personagem->posy = colision_area_Ty;
-    }
-    if (personagem->posy > colision_area_By && horizontal_interval)
-    {
-        personagem->posy = colision_area_By;
+        // Simples: "empurra" o personagem para fora da caixa dependendo da direção
+        if (dir == 0) // baixo
+            personagem->posy = obj_posy - person_h;
+        else if (dir == 1) // esquerda
+            personagem->posx = obj_posx + obj_w;
+        else if (dir == 2) // cima
+            personagem->posy = obj_posy + obj_h;
+        else if (dir == 3) // direita
+            personagem->posx = obj_posx - person_w;
     }
 }
