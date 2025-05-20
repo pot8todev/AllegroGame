@@ -7,14 +7,18 @@ CFLAGS = -I${ALLEGRO}/include
 LDFLAGS = -L${ALLEGRO}/lib 
 endif
 
-LDLIBS = -lallegro -lallegro_font -lallegro_ttf -lallegro_image -lallegro_primitives -lallegro_acodec -lallegro_audio moving.c
+LDLIBS = -lallegro -lallegro_font -lallegro_ttf -lallegro_image -lallegro_primitives -lallegro_acodec -lallegro_audio functions/moving.c functions/colision.c
 
-TARGETS = main
+TARGETS = output/main
 
 all: ${TARGETS}
 	./${TARGETS}
 
-${TARGETS}: ${TARGETS}.c
+output/main: main.c | output
+	${CC} ${CFLAGS} $< -o $@ ${LDFLAGS} ${LDLIBS}
+
+output:
+	mkdir -p output
 
 clean:
-	rm ${TARGETS}
+	rm -rf output
