@@ -81,20 +81,12 @@ int main()
             movingTestRight(keys[ALLEGRO_KEY_RIGHT], &moving, personagem.velocidade, &dir, &personagem.posx);
             movingTestLeft(keys[ALLEGRO_KEY_LEFT], &moving, personagem.velocidade, &dir, &personagem.posx);
 
-            // Limita o personagem dentro da tela
-            if (personagem.posx < 0)
-                personagem.posx = 0;
-            if (personagem.posx > (maxdisplay_w - personagem.sprite_w))
-                personagem.posx = (maxdisplay_w - personagem.sprite_w);
-            if (personagem.posy < 0)
-                personagem.posy = 0;
-            if (personagem.posy > (maxdisplay_h - personagem.sprite_h))
-                personagem.posy = (maxdisplay_h - personagem.sprite_h);
+            limita_mapa(&personagem.posx, &personagem.posy, maxdisplay_w, maxdisplay_h, personagem.sprite_w, personagem.sprite_h);
 
             // frame loop
             if (moving)
             {
-                //normalizacao vetor diagonal
+                // normalizacao vetor diagonal
                 normalVetor(&personagem.posy, &personagem.posx, &posxi, &posyi);
 
                 frame_counter++;
@@ -103,7 +95,7 @@ int main()
                     frame = (frame + 1) % personagem.num_frames;
                     frame_counter = 0;
                 }
-                //recebe as novas posicoes
+                // recebe as novas posicoes
                 posxi = personagem.posx;
                 posyi = personagem.posy;
             }

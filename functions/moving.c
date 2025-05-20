@@ -46,15 +46,27 @@ void fps(int *frame_counter, int *frame, int num_frames)
         *frame_counter = 0;
     }
 }
-void normalVetor(float *posY, float *posX, float* posXi, float* posYi)
+void normalVetor(float *posY, float *posX, float *posXi, float *posYi)
 {
-     if (*posY != *posYi && *posX != *posXi)
-                {
-                    float dy = (*posY - *posYi);
-                    float dx = (*posX - *posXi);
-                    dy /= (1.4); // TODO math.h
-                    dx /= (1.4);
-                    *posY = *posYi + dy;
-                    *posX = *posXi + dx;
-                }
-            }
+    if (*posY != *posYi && *posX != *posXi)
+    {
+        float dy = (*posY - *posYi);
+        float dx = (*posX - *posXi);
+        dy /= (1.4); // TODO math.h
+        dx /= (1.4);
+        *posY = *posYi + dy;
+        *posX = *posXi + dx;
+    }
+}
+void limita_mapa(float *posx, float *posy, int maxdisplay_w, int maxdisplay_h, int sprite_w, int sprite_h)
+{
+    // Limita o personagem dentro da tela
+    if (*posx < 0)
+        *posx = 0;
+    if (*posx > (maxdisplay_w - sprite_w))
+        *posx = (maxdisplay_w - sprite_w);
+    if (*posy < 0)
+        *posy = 0;
+    if (*posy > (maxdisplay_h - sprite_h))
+        *posy = (maxdisplay_h - sprite_h);
+}
