@@ -3,7 +3,8 @@
 
 #include <allegro5/allegro_image.h>
 
-typedef struct{
+typedef struct
+{
     ALLEGRO_BITMAP *sprite;
     float posx;
     float posy;
@@ -11,6 +12,11 @@ typedef struct{
     const int sprite_w;
     const int sprite_h;
     const int num_frames;
-}OBJETO;
+} OBJETO;
+
+/*TODO
+  OBJETO personagem = {al_load_bitmap("images/sprites.png"), 300, 200, 4.0, 32, 32, 4};
+     OBJETO woodenCrateBox = {woodenCrate, 60, 60, 0, 32, 32, 0};
+*/
 
 #endif
