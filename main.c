@@ -94,16 +94,8 @@ int main()
             // frame loop
             if (moving)
             {
-
-                if (personagem.posy != posyi && personagem.posx != posxi)
-                {
-                    float dy = (personagem.posy - posyi);
-                    float dx = (personagem.posx - posxi);
-                    dy /= (1.4); // TODO math.h
-                    dx /= (1.4);
-                    personagem.posy = posyi + dy;
-                    personagem.posx = posxi + dx;
-                }
+                //normalizacao vetor diagonal
+                normalVetor(&personagem.posy, &personagem.posx, &posxi, &posyi);
 
                 frame_counter++;
                 if (frame_counter >= 10)
@@ -111,6 +103,7 @@ int main()
                     frame = (frame + 1) % personagem.num_frames;
                     frame_counter = 0;
                 }
+                //recebe as novas posicoes
                 posxi = personagem.posx;
                 posyi = personagem.posy;
             }

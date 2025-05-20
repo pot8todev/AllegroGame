@@ -46,3 +46,15 @@ void fps(int *frame_counter, int *frame, int num_frames)
         *frame_counter = 0;
     }
 }
+void normalVetor(float *posY, float *posX, float* posXi, float* posYi)
+{
+     if (*posY != *posYi && *posX != *posXi)
+                {
+                    float dy = (*posY - *posYi);
+                    float dx = (*posX - *posXi);
+                    dy /= (1.4); // TODO math.h
+                    dx /= (1.4);
+                    *posY = *posYi + dy;
+                    *posX = *posXi + dx;
+                }
+            }
