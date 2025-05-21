@@ -13,7 +13,7 @@ void colision(OBJETO *objeto, OBJETO *personagem, int dir)
 
     // Retângulo da caixa
     float obj_posx = objeto->posx, obj_posy = objeto->posy;
-    float obj_w = objeto->sprite_w, obj_h = objeto->sprite_h;
+    float obj_w = objeto->sprite_w, obj_h = objeto->sprite_h - 5;
 
     // Verifica sobreposição
     if (person_posx < obj_posx + obj_w && person_posx + person_w > obj_posx &&

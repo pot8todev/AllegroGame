@@ -18,8 +18,8 @@ int main()
     al_init_ttf_addon();
     al_init_primitives_addon();
 
-    int maxdisplay_w = 600;
-    int maxdisplay_h = 400;
+    int maxdisplay_w = 640;
+    int maxdisplay_h = 640;
 
     ALLEGRO_DISPLAY *disp = al_create_display(maxdisplay_w, maxdisplay_h);
     ALLEGRO_TIMER *timer = al_create_timer(1.0 / 60.0); // TODO deixar mais generico
@@ -107,8 +107,8 @@ int main()
                 frame = 0; // Parado: usa quadro do meio
             }
             al_clear_to_color(al_map_rgb(0, 0, 0));
-            al_draw_bitmap_region(sprite, frame * personagem.sprite_w, dir * personagem.sprite_h, personagem.sprite_w, personagem.sprite_h, personagem.posx, personagem.posy, 0);
             al_draw_bitmap_region(wooden_crate_box.sprite, 0, 0, wooden_crate_box.sprite_w, wooden_crate_box.sprite_h, wooden_crate_box.posx, wooden_crate_box.posy, 0);
+            al_draw_bitmap_region(sprite, frame * personagem.sprite_w, dir * personagem.sprite_h, personagem.sprite_w, personagem.sprite_h, personagem.posx, personagem.posy, 0);
 
             al_flip_display();
         }
