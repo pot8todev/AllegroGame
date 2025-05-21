@@ -1,5 +1,5 @@
-#ifndef PERSONAGEM_H
-#define PERSONAGEM_H
+#ifndef OBJETO_H
+#define OBJETO_H
 
 #include <allegro5/allegro.h>
 

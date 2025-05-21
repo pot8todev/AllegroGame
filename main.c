@@ -8,6 +8,7 @@
 #include "functions/colision.h"
 #include "structures/objeto.h"
 #include <stdio.h>
+#include "functions/cria_mapa.h"
 
 int main()
 {
@@ -39,7 +40,7 @@ int main()
 
     // --- Variaveis de jogo ---
 
-    OBJETO personagem = {al_load_bitmap("images/sprites.png"), 300, 200, 4.0, 32, 32, 4};
+    OBJETO personagem = {sprite, 300, 200, 4.0, 32, 32, 4};
     OBJETO wooden_crate_box = {wooden_crate, 60, 60, 0, 32, 32, 0};
 
     float posxi, posyi;
@@ -79,6 +80,11 @@ int main()
             movingTestRight(keys[ALLEGRO_KEY_RIGHT], &moving, personagem.velocidade, &dir, &personagem.posx);
             movingTestLeft(keys[ALLEGRO_KEY_LEFT], &moving, personagem.velocidade, &dir, &personagem.posx);
 
+            movingTestUp(keys[ALLEGRO_KEY_W], &moving, personagem.velocidade, &dir, &personagem.posy);
+            movingTestDown(keys[ALLEGRO_KEY_S], &moving, personagem.velocidade, &dir, &personagem.posy);
+            movingTestRight(keys[ALLEGRO_KEY_D], &moving, personagem.velocidade, &dir, &personagem.posx);
+            movingTestLeft(keys[ALLEGRO_KEY_A], &moving, personagem.velocidade, &dir, &personagem.posx);
+
             limita_mapa(&personagem.posx, &personagem.posy, maxdisplay_w, maxdisplay_h, personagem.sprite_w, personagem.sprite_h);
 
             // frame loop
@@ -108,6 +114,7 @@ int main()
             }
             al_clear_to_color(al_map_rgb(0, 0, 0));
             al_draw_bitmap_region(wooden_crate_box.sprite, 0, 0, wooden_crate_box.sprite_w, wooden_crate_box.sprite_h, wooden_crate_box.posx, wooden_crate_box.posy, 0);
+            cria_mapa("images/dados.txt", wooden_crate_box);
             al_draw_bitmap_region(sprite, frame * personagem.sprite_w, dir * personagem.sprite_h, personagem.sprite_w, personagem.sprite_h, personagem.posx, personagem.posy, 0);
 
             al_flip_display();

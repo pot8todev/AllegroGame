@@ -1,10 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include "../structures/objeto.h"
 
 #define LINHAS 20
 #define COLUNAS 20
 
-void cria_mapa(char mapa[])
+void cria_mapa(char mapa[], OBJETO obj1)
 {
     FILE *arquivo;
     int matriz[LINHAS][COLUNAS];
@@ -16,7 +17,7 @@ void cria_mapa(char mapa[])
     {
         for (j = 0; j < COLUNAS; j++)
         {
-            if (fscanf(arquivo, "%d", &matriz[i][j]) != 1)
+            if (fscanf(arquivo, "%d", &matriz[j][i]) != 1)
             {
                 fclose(arquivo);
                 return;
@@ -30,9 +31,9 @@ void cria_mapa(char mapa[])
     {
         for (j = 0; j < COLUNAS; j++)
         {
-            if (matriz[i][j] == 1)
+            if (matriz[j][i] == 1)
             {
-                al_draw_bitmap_region(wooden_crate_box.sprite, 0, 0, wooden_crate_box.sprite_w, wooden_crate_box.sprite_h, wooden_crate_box.posx, wooden_crate_box.posy, 0);
+                al_draw_bitmap_region(obj1.sprite, 0, 0, obj1.sprite_w, obj1.sprite_h, (j * 32), (i * 32), 0);
             }
         }
     }
