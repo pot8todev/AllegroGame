@@ -27,3 +27,15 @@ void colision(OBJETO *objeto, OBJETO *personagem) {
       personagem->posx = obj_posx - person_w;
   }
 }
+void limita_mapa(float *posx, float *posy, int maxdisplay_w, int maxdisplay_h,
+                 int sprite_w, int sprite_h) {
+  // Limita o personagem dentro da tela
+  if (*posx < 0)
+    *posx = 0;
+  if (*posx > (maxdisplay_w - sprite_w))
+    *posx = (maxdisplay_w - sprite_w);
+  if (*posy < 0)
+    *posy = 0;
+  if (*posy > (maxdisplay_h - sprite_h))
+    *posy = (maxdisplay_h - sprite_h);
+}

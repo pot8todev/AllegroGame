@@ -89,10 +89,10 @@ int main() {
       // frame loop
       if (moving) {
         // aplicaçao do incremento
+        normalVetor(&personagem);
         personagem.posx += personagem.vecVelocidade.dx;
         personagem.posy += personagem.vecVelocidade.dy;
         // normalizacao vetor diagonal
-        // normalVetor(&personagem.posy, &personagem.posx, &posxi, &posyi);
 
         // TODO fps func
         frame_counter++;
@@ -103,9 +103,6 @@ int main() {
 
         colision(&wooden_crate_box, &personagem);
 
-        // recebe as novas posicoes
-        // posxi = personagem.posx;
-        // posyi = personagem.posy;
       } else {
         frame = 0; // Parado: usa quadro do meio
       }
