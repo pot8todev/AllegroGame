@@ -42,7 +42,7 @@ void fps(int *frame_counter, int *frame, int num_frames) {
 }
 void normalVetor(OBJETO *obj) {
   if (obj->vecVelocidade.dx && obj->vecVelocidade.dy) {
-    obj->vecVelocidade.dy /= sqrt(2);
-    obj->vecVelocidade.dx /= sqrt(2);
+    obj->vecVelocidade.dy /= 5;
+    obj->vecVelocidade.dx /= 5;
   }
 }
