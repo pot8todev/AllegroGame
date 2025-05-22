@@ -4,31 +4,31 @@
 #include <stdbool.h>
 #include <stdio.h>
 
-void movingTestUp(bool keyTest, bool *moving, OBJETO *obj) {
+void moving_test_up(bool keyTest, bool *moving, OBJETO *obj) {
   if (keyTest) {
     // alterando o incremento
-    (obj->vecVelocidade.dy) = -(obj->vecVelocidade.velocidade);
+    (obj->vec_velocidade.dy) = -(obj->vec_velocidade.velocidade);
     obj->sprite_dir = 2;
     *moving = true;
   }
 }
-void movingTestDown(bool keyTest, bool *moving, OBJETO *obj) {
+void moving_test_down(bool keyTest, bool *moving, OBJETO *obj) {
   if (keyTest) {
-    obj->vecVelocidade.dy = (obj->vecVelocidade.velocidade);
+    obj->vec_velocidade.dy = (obj->vec_velocidade.velocidade);
     obj->sprite_dir = 0;
     *moving = true;
   }
 }
-void movingTestRight(bool keyTest, bool *moving, OBJETO *obj) {
+void moving_test_right(bool keyTest, bool *moving, OBJETO *obj) {
   if (keyTest) {
-    obj->vecVelocidade.dx = (obj->vecVelocidade.velocidade);
+    obj->vec_velocidade.dx = (obj->vec_velocidade.velocidade);
     obj->sprite_dir = 3;
     *moving = true;
   }
 }
-void movingTestLeft(bool keyTest, bool *moving, OBJETO *obj) {
+void moving_test_left(bool keyTest, bool *moving, OBJETO *obj) {
   if (keyTest) {
-    obj->vecVelocidade.dx = -(obj->vecVelocidade.velocidade);
+    obj->vec_velocidade.dx = -(obj->vec_velocidade.velocidade);
     obj->sprite_dir = 1;
     *moving = true;
   }
@@ -40,9 +40,9 @@ void fps(int *frame_counter, int *frame, int num_frames) {
     *frame_counter = 0;
   }
 }
-void normalVetor(OBJETO *obj) {
-  if (obj->vecVelocidade.dx && obj->vecVelocidade.dy) {
-    obj->vecVelocidade.dy /= sqrt(2);
-    obj->vecVelocidade.dx /= sqrt(2);
+void normal_vetor(OBJETO *obj) {
+  if (obj->vec_velocidade.dx && obj->vec_velocidade.dy) {
+    obj->vec_velocidade.dy /= sqrt(2);
+    obj->vec_velocidade.dx /= sqrt(2);
   }
 }
