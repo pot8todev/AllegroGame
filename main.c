@@ -88,11 +88,7 @@ int main() {
 
       // frame loop
       if (moving) {
-        // personagem.vecVelocidade.velocidade = 4;
         // aplicaçao do incremento
-        printf("%f\n", personagem.vecVelocidade.dx);
-        printf("%f\n", personagem.vecVelocidade.dy);
-
         personagem.posx += personagem.vecVelocidade.dx;
         personagem.posy += personagem.vecVelocidade.dy;
         // normalizacao vetor diagonal
@@ -105,7 +101,7 @@ int main() {
           frame_counter = 0;
         }
 
-        // colision(&wooden_crate_box, &personagem, dir);
+        colision(&wooden_crate_box, &personagem);
 
         // recebe as novas posicoes
         // posxi = personagem.posx;
