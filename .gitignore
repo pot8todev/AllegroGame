@@ -1,2 +1,8 @@
 .vscode/settings.json
 /output
+/allegro64
+/build
+/CMakeLists.txt
+bin/
+.cache/
+Makefile
