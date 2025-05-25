@@ -4,27 +4,30 @@
 #include <stdbool.h>
 #include <stdio.h>
 
+bool colidiu(OBJETO *objeto, OBJETO *personagem) {}
 void colision(OBJETO *objeto, OBJETO *personagem) {
+  // norma do vetor de movimento
+
   // Retângulo do personagem
   float person_posx = personagem->posx, person_posy = personagem->posy;
+  float person_nova_posx = personagem->posx + personagem->vecVelocidade.dx;
+  float person_nova_posy = personagem->posy + personagem->vecVelocidade.dy;
+
   float person_w = personagem->sprite_w, person_h = personagem->sprite_h;
 
   // Retângulo da caixa
   float obj_posx = objeto->posx, obj_posy = objeto->posy;
-  float obj_w = objeto->sprite_w, obj_h = objeto->sprite_h - 5;
+  float obj_w = objeto->sprite_w, obj_h = objeto->sprite_h;
 
-  // Verifica sobreposição
-  if (person_posx < obj_posx + obj_w && person_posx + person_w > obj_posx &&
-      person_posy < obj_posy + obj_h && person_posy + person_h > obj_posy) {
-    // Simples: "empurra" o personagem para fora da caixa dependendo da direção
-    if (personagem->sprite_dir == 0) // baixo
-      personagem->posy = obj_posy - person_h;
-    else if (personagem->sprite_dir == 1) // esquerda
-      personagem->posx = obj_posx + obj_w;
-    else if (personagem->sprite_dir == 2) // cima
-      personagem->posy = obj_posy + obj_h;
-    else if (personagem->sprite_dir == 3) // direita
-      personagem->posx = obj_posx - person_w;
+  // SE o movimento acontecesse e causasse uma colisao:
+  bool colidiux = person_nova_posy < obj_posy + obj_h / 2 &&
+                  person_nova_posy + person_h / 2 > obj_posy &&
+                  person_nova_posx < obj_posx + obj_w / 2 &&
+                  person_nova_posx + person_w / 2 > obj_posx;
+  if (colidiux) {
+    // Inverte o vetor de movimento
+    personagem->vecVelocidade.dx = 0;
+    personagem->vecVelocidade.dy = 0;
   }
 }
 void limita_mapa(float *posx, float *posy, int maxdisplay_w, int maxdisplay_h,

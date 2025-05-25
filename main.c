@@ -90,6 +90,7 @@ int main() {
       if (moving) {
         // aplicaçao do incremento
         normalVetor(&personagem);
+        colision(&wooden_crate_box, &personagem);
         personagem.posx += personagem.vecVelocidade.dx;
         personagem.posy += personagem.vecVelocidade.dy;
         // normalizacao vetor diagonal
@@ -101,8 +102,6 @@ int main() {
           frame_counter = 0;
         }
 
-        colision(&wooden_crate_box, &personagem);
-
       } else {
         frame = 0; // Parado: usa quadro do meio
       }
@@ -111,11 +110,15 @@ int main() {
                             wooden_crate_box.sprite_w,
                             wooden_crate_box.sprite_h, wooden_crate_box.posx,
                             wooden_crate_box.posy, 0);
-      cria_mapa("images/dados.txt", wooden_crate_box);
       al_draw_bitmap_region(sprite, frame * personagem.sprite_w,
                             personagem.sprite_dir * personagem.sprite_h,
                             personagem.sprite_w, personagem.sprite_h,
                             personagem.posx, personagem.posy, 0);
+      al_draw_bitmap_region(wooden_crate_box.sprite, 0, 0,
+                            wooden_crate_box.sprite_w,
+                            wooden_crate_box.sprite_h * 0.5,
+                            wooden_crate_box.posx, wooden_crate_box.posy, 0);
+      cria_mapa("images/dados.txt", wooden_crate_box);
 
       al_flip_display();
     }
