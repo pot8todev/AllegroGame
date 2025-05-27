@@ -94,7 +94,8 @@
                 {
                     // aplicaçao do incremento
                     normal_vetor(&personagem);
-                    personagem.posx += personagem.vec_velocidade.dx;
+                    colision(&wooden_crate_box, &personagem);
+        personagem.posx += personagem.vec_velocidade.dx;
                     personagem.posy += personagem.vec_velocidade.dy;
                     // normalizacao vetor diagonal
 
@@ -106,22 +107,23 @@
                         frame_counter = 0;
                     }
 
-                    colision(&wooden_crate_box, &personagem);
-                }
-                else
-                {
-                    frame = 0; // Parado: usa quadro do meio
-                }
-                al_clear_to_color(al_map_rgb(0, 0, 0));
-                al_draw_bitmap_region(wooden_crate_box.sprite, 0, 0,
-                                    wooden_crate_box.sprite_w,
-                                    wooden_crate_box.sprite_h, wooden_crate_box.posx,
-                                    wooden_crate_box.posy, 0);
-                cria_mapa("images/dados.txt", wooden_crate_box);
-                al_draw_bitmap_region(sprite, frame * personagem.sprite_w,
-                                    personagem.sprite_dir * personagem.sprite_h,
-                                    personagem.sprite_w, personagem.sprite_h,
-                                    personagem.posx, personagem.posy, 0);
+      } else {
+        frame = 0; // Parado: usa quadro do meio
+      }
+      al_clear_to_color(al_map_rgb(0, 0, 0));
+      al_draw_bitmap_region(wooden_crate_box.sprite, 0, 0,
+                            wooden_crate_box.sprite_w,
+                            wooden_crate_box.sprite_h, wooden_crate_box.posx,
+                            wooden_crate_box.posy, 0);
+      al_draw_bitmap_region(sprite, frame * personagem.sprite_w,
+                            personagem.sprite_dir * personagem.sprite_h,
+                            personagem.sprite_w, personagem.sprite_h,
+                            personagem.posx, personagem.posy, 0);
+      al_draw_bitmap_region(wooden_crate_box.sprite, 0, 0,
+                            wooden_crate_box.sprite_w,
+                            wooden_crate_box.sprite_h * 0.5,
+                            wooden_crate_box.posx, wooden_crate_box.posy, 0);
+      cria_mapa("images/dados.txt", wooden_crate_box);
 
                 al_flip_display();
             }
