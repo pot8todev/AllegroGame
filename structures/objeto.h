@@ -3,6 +3,10 @@
 
 #include <allegro5/allegro.h>
 typedef struct {
+  float x;
+  float y;
+} POSICAO;
+typedef struct {
   // incremento do movimento
   float dx;
   float dy;

@@ -20,7 +20,6 @@ int main() {
 
   int maxdisplay_w = 640;
   int maxdisplay_h = 640;
-
   ALLEGRO_DISPLAY *disp = al_create_display(maxdisplay_w, maxdisplay_h);
   ALLEGRO_TIMER *timer =
       al_create_timer(1.0 / 60.0); // TODO deixar mais generico
@@ -118,8 +117,12 @@ int main() {
                             wooden_crate_box.sprite_w,
                             wooden_crate_box.sprite_h * 0.5,
                             wooden_crate_box.posx, wooden_crate_box.posy, 0);
-      cria_mapa("images/dados.txt", wooden_crate_box);
 
+      // wooden_crate_box_QNT);
+
+      int wooden_crate_box_QNT;
+      POSICAO obj_mapa[] = cria_mapa("images/dados.txt", wooden_crate_box,
+                                     &wooden_crate_box_QNT);
       al_flip_display();
     }
     // ------------------------------------------------
