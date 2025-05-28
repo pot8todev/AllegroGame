@@ -25,6 +25,7 @@ typedef struct {
   const int sprite_w;
   const int sprite_h;
   const int num_frames;
+  const bool colisao;
 } OBJETO;
 
 #endif

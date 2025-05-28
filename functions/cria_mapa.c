@@ -50,8 +50,6 @@ HITBOX *cria_mapa(char mapa[], OBJETO obj1, int *qnt_objeto) {
   for (i = 0; i < LINHAS; i++) {
     for (j = 0; j < COLUNAS; j++) {
       if (matriz[i][j] == 1) {
-        // obj_mapa[obj_num].x = j;
-        // obj_mapa[obj_num].y = i;
         obj_mapa[obj_num] =
             create_hitbox(TILE_SIZE * i, TILE_SIZE * j, TILE_SIZE, TILE_SIZE);
 

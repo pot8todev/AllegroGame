@@ -10,35 +10,33 @@ HITBOX create_hitbox(float x, float y, float w, float h) {
   hb.D = y + h/2;
   return hb;
 }
-void colision(OBJETO *objeto, OBJETO *personagem) {
-    // Cria hitboxes futuras considerando o movimento
+#include "colision.h"
+
+void colision(HITBOX *objetos, int num_objetos, OBJETO *personagem) {
+  for (int i = 0; i < num_objetos; i++) {
     HITBOX hitbox_personagem = create_hitbox(
-            //posiçao do personagem pos deslocamento
         personagem->posx + personagem->vecVelocidade.dx,
         personagem->posy + personagem->vecVelocidade.dy,
         personagem->sprite_w,
         personagem->sprite_h
     );
 
-    HITBOX hitbox_objeto = create_hitbox(
-        objeto->posx,
-        objeto->posy,
-        objeto->sprite_w,
-        objeto->sprite_h
-    );
+    HITBOX hitbox_obj = objetos[i];
 
-    // Verifica colisão AABB (Axis-Aligned Bounding Box)
     bool colidiu =
-        hitbox_personagem.L < hitbox_objeto.R &&
-        hitbox_personagem.R > hitbox_objeto.L &&
-        hitbox_personagem.U < hitbox_objeto.D &&
-        hitbox_personagem.D > hitbox_objeto.U;
+        hitbox_personagem.L < hitbox_obj.R &&
+        hitbox_personagem.R > hitbox_obj.L &&
+        hitbox_personagem.U < hitbox_obj.D &&
+        hitbox_personagem.D > hitbox_obj.U;
 
     if (colidiu) {
-        personagem->vecVelocidade.dx = 0;
-        personagem->vecVelocidade.dy = 0;
+      personagem->vecVelocidade.dx = 0;
+      personagem->vecVelocidade.dy = 0;
+      break;
     }
-}void limita_mapa(float *posx, float *posy, int maxdisplay_w, int maxdisplay_h,
+  }
+}
+void limita_mapa(float *posx, float *posy, int maxdisplay_w, int maxdisplay_h,
                  int sprite_w, int sprite_h) {
   // Limita o personagem dentro da tela
   if (*posx < 0)

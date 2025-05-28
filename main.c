@@ -39,8 +39,8 @@ int main() {
 
   // --- Variaveis de jogo ---
 
-  OBJETO personagem = {sprite, 300, 200, {0, 0, 8.0}, 0, 32, 32, 4};
-  OBJETO wooden_crate_box = {wooden_crate, 60, 60, {0, 0, 0}, 0, 32, 32, 0};
+  OBJETO personagem = {sprite, 300, 200, {0, 0, 8.0}, 0, 32, 32, 4, 1};
+  OBJETO wooden_crate_box = {wooden_crate, 60, 60, {0, 0, 0}, 0, 32, 32, 0, 1};
 
   float posxi, posyi;
 
@@ -49,7 +49,7 @@ int main() {
   int frame_counter = 0;
   int wooden_crate_box_QNT;
   HITBOX *obj_mapa =
-  cria_mapa("images/dados.txt", wooden_crate_box, &wooden_crate_box_QNT);
+      cria_mapa("images/dados.txt", wooden_crate_box, &wooden_crate_box_QNT);
 
   bool running = true;
   bool moving = false;
@@ -92,7 +92,7 @@ int main() {
       if (moving) {
         // aplicaçao do incremento
         normalVetor(&personagem);
-        colision(&wooden_crate_box, &personagem);
+        colision(obj_mapa, wooden_crate_box_QNT, &personagem);
         personagem.posx += personagem.vecVelocidade.dx;
         personagem.posy += personagem.vecVelocidade.dy;
         // normalizacao vetor diagonal
@@ -121,8 +121,12 @@ int main() {
                             wooden_crate_box.sprite_h * 0.5,
                             wooden_crate_box.posx, wooden_crate_box.posy, 0);
 
-      // wooden_crate_box_QNT);
-
+      // Desenho dos objetos do mapa
+      for (int i = 0; i < wooden_crate_box_QNT; i++) {
+        al_draw_bitmap_region(
+            wooden_crate_box.sprite, 0, 0, wooden_crate_box.sprite_w,
+            wooden_crate_box.sprite_h, obj_mapa[i].L, obj_mapa[i].U, 0);
+      }
       al_flip_display();
     }
     // ------------------------------------------------
