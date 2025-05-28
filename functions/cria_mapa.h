@@ -2,4 +2,4 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-POSICAO *cria_mapa(char mapa[], OBJETO obj1, int *qnt_objeto);
+HITBOX *cria_mapa(char mapa[], OBJETO obj1, int *qnt_objeto);

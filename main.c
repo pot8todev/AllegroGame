@@ -22,7 +22,7 @@ int main() {
   int maxdisplay_h = 640;
   ALLEGRO_DISPLAY *disp = al_create_display(maxdisplay_w, maxdisplay_h);
   ALLEGRO_TIMER *timer =
-      al_create_timer(1.0 / 60.0); // TODO deixar mais generico
+      al_create_timer(1.0 / 30.0); // TODO deixar mais generico
   ALLEGRO_EVENT_QUEUE *queue = al_create_event_queue();
   ALLEGRO_BITMAP *sprite = al_load_bitmap("images/sprites.png");
   ALLEGRO_BITMAP *wooden_crate = al_load_bitmap("images/woodenCrate.png");
@@ -39,7 +39,7 @@ int main() {
 
   // --- Variaveis de jogo ---
 
-  OBJETO personagem = {sprite, 300, 200, {0, 0, 4.0}, 0, 32, 32, 4};
+  OBJETO personagem = {sprite, 300, 200, {0, 0, 8.0}, 0, 32, 32, 4};
   OBJETO wooden_crate_box = {wooden_crate, 60, 60, {0, 0, 0}, 0, 32, 32, 0};
 
   float posxi, posyi;
@@ -47,6 +47,9 @@ int main() {
   // int dir = 0; // 0 = baixo, 1 = esquerda, 2 = cima, 3 = direita
   int frame = 0;
   int frame_counter = 0;
+  int wooden_crate_box_QNT;
+  HITBOX *obj_mapa =
+  cria_mapa("images/dados.txt", wooden_crate_box, &wooden_crate_box_QNT);
 
   bool running = true;
   bool moving = false;
@@ -120,9 +123,6 @@ int main() {
 
       // wooden_crate_box_QNT);
 
-      int wooden_crate_box_QNT;
-      POSICAO obj_mapa[] = cria_mapa("images/dados.txt", wooden_crate_box,
-                                     &wooden_crate_box_QNT);
       al_flip_display();
     }
     // ------------------------------------------------

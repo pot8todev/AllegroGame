@@ -3,9 +3,11 @@
 
 #include <allegro5/allegro.h>
 typedef struct {
-  float x;
-  float y;
-} POSICAO;
+  float L;
+  float R;
+  float U;
+  float D;
+} HITBOX;
 typedef struct {
   // incremento do movimento
   float dx;
