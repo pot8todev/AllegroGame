@@ -4,6 +4,12 @@
 #include <allegro5/allegro.h>
 
 typedef struct {
+  float L;
+  float R;
+  float U;
+  float D;
+} HITBOX;
+typedef struct {
   // incremento do movimento
   float dx;
   float dy;
@@ -20,6 +26,7 @@ typedef struct {
   const int sprite_w;
   const int sprite_h;
   const int num_frames;
+  const bool colisao;
 } OBJETO;
 
 #endif

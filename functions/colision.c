@@ -2,32 +2,38 @@
 #include "../structures/objeto.h"
 #include <allegro5/allegro_image.h>
 #include <stdbool.h>
-#include <stdio.h>
+HITBOX create_hitbox(float x, float y, float w, float h) {
+  HITBOX hb;
+  hb.L = x;
+  hb.R = x + w*0.6;
+  hb.U = y;
+  hb.D = y + h/2;
+  return hb;
+}
+#include "colision.h"
 
-bool colidiu(OBJETO *objeto, OBJETO *personagem) {}
-void colision(OBJETO *objeto, OBJETO *personagem) {
-  // norma do vetor de movimento
+void colision(HITBOX *objetos, int num_objetos, OBJETO *personagem) {
+  for (int i = 0; i < num_objetos; i++) {
+    HITBOX hitbox_personagem = create_hitbox(
+        personagem->posx + personagem->vecVelocidade.dx,
+        personagem->posy + personagem->vecVelocidade.dy,
+        personagem->sprite_w,
+        personagem->sprite_h
+    );
 
-  // Retângulo do personagem
-  float person_posx = personagem->posx, person_posy = personagem->posy;
-  float person_nova_posx = personagem->posx + personagem->vec_velocidade.dx;
-  float person_nova_posy = personagem->posy + personagem->vec_velocidade.dy;
+    HITBOX hitbox_obj = objetos[i];
 
-  float person_w = personagem->sprite_w, person_h = personagem->sprite_h;
+    bool colidiu =
+        hitbox_personagem.L < hitbox_obj.R &&
+        hitbox_personagem.R > hitbox_obj.L &&
+        hitbox_personagem.U < hitbox_obj.D &&
+        hitbox_personagem.D > hitbox_obj.U;
 
-  // Retângulo da caixa
-  float obj_posx = objeto->posx, obj_posy = objeto->posy;
-  float obj_w = objeto->sprite_w + 10, obj_h = objeto->sprite_h + 10;
-
-  // SE o movimento acontecesse e causasse uma colisao:
-  bool colidiux = person_nova_posy < obj_posy + obj_h / 2 &&
-                  person_nova_posy + person_h / 2 > obj_posy &&
-                  person_nova_posx < obj_posx + obj_w / 2 &&
-                  person_nova_posx + (person_w / 2) + 5 > obj_posx;
-  if (colidiux) {
-    // Inverte o vetor de movimento
-    personagem->vec_velocidade.dx = 0;
-    personagem->vec_velocidade.dy = 0;
+    if (colidiu) {
+      personagem->vecVelocidade.dx = 0;
+      personagem->vecVelocidade.dy = 0;
+      break;
+    }
   }
 }
 void limita_mapa(float *posx, float *posy, int maxdisplay_w, int maxdisplay_h,

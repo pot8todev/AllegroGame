@@ -1,5 +1,5 @@
+#include "../structures/objeto.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include "../structures/objeto.h"
 
-void cria_mapa(char mapa[], OBJETO obj1);
+HITBOX *cria_mapa(char mapa[], OBJETO obj1, int *qnt_objeto);
