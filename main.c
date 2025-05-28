@@ -10,6 +10,7 @@
 #include <allegro5/keyboard.h>
 #include <stdio.h>
 
+#define TOTAL_TIPOS_OBJETOS 2
 int main() {
   al_init();
   al_install_keyboard();
@@ -26,6 +27,7 @@ int main() {
   ALLEGRO_EVENT_QUEUE *queue = al_create_event_queue();
   ALLEGRO_BITMAP *sprite = al_load_bitmap("images/sprites.png");
   ALLEGRO_BITMAP *wooden_crate = al_load_bitmap("images/woodenCrate.png");
+  ALLEGRO_BITMAP *grass = al_load_bitmap("images/grass.png");
 
   bool keys[ALLEGRO_KEY_MAX] = {0};
 
@@ -39,15 +41,14 @@ int main() {
 
   // --- Variaveis de jogo ---
 
+  OBJETO objetos[TOTAL_TIPOS_OBJETOS];
   OBJETO personagem = {sprite, 300, 200, {0, 0, 8.0}, 0, 32, 32, 4, 1};
   OBJETO wooden_crate_box = {wooden_crate, 60, 60, {0, 0, 0}, 0, 32, 32, 0, 1};
+  OBJETO grass_layout = {grass, 60, 60, {0, 0, 0}, 0, 32, 32, 0, 1};
+  int wooden_crate_box_QNT = 0;
 
-  float posxi, posyi;
-
-  // int dir = 0; // 0 = baixo, 1 = esquerda, 2 = cima, 3 = direita
   int frame = 0;
   int frame_counter = 0;
-  int wooden_crate_box_QNT;
   HITBOX *obj_mapa =
       cria_mapa("images/dados.txt", wooden_crate_box, &wooden_crate_box_QNT);
 
