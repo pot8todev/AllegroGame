@@ -22,13 +22,15 @@ int main()
 
   int maxdisplay_w = 640;
   int maxdisplay_h = 640;
+  double speed = 1.0 / 40.0;
+
   ALLEGRO_DISPLAY *disp = al_create_display(maxdisplay_w, maxdisplay_h);
   ALLEGRO_TIMER *timer =
-      al_create_timer(1.0 / 30.0); // TODO deixar mais generico
+      al_create_timer(speed); // TODO deixar mais generico
   ALLEGRO_EVENT_QUEUE *queue = al_create_event_queue();
   ALLEGRO_BITMAP *sprite = al_load_bitmap("images/sprites.png");
-  ALLEGRO_BITMAP *wooden_crate = al_load_bitmap("images/woodenCrate.png");
-  ALLEGRO_BITMAP *grass = al_load_bitmap("images/grass.png");
+  ALLEGRO_BITMAP *wall = al_load_bitmap("images/wall.png");
+  ALLEGRO_BITMAP *floor = al_load_bitmap("images/floor.png");
 
   bool keys[ALLEGRO_KEY_MAX] = {0};
 
@@ -43,16 +45,16 @@ int main()
   // --- Variaveis de jogo ---
 
   OBJETO objetos[TOTAL_TIPOS_OBJETOS];
-  OBJETO personagem = {sprite, 300, 200, {0, 0, 8.0}, 0, 32, 32, 4, 1};
-  OBJETO wooden_crate_box = {wooden_crate, 60, 60, {0, 0, 0}, 0, 32, 32, 0, 1};
-  OBJETO grass_layout = {grass, 60, 60, {0, 0, 0}, 0, 32, 32, 0, 1};
-  int wooden_crate_box_QNT = 0;
+  OBJETO personagem = {sprite, 300, 200, {0, 0, 6.0}, 0, 32, 32, 4, 1};
+  OBJETO wall_tile = {wall, 60, 60, {0, 0, 0}, 0, 32, 32, 0, 1};
+  OBJETO floor_tile = {floor, 60, 60, {0, 0, 0}, 0, 32, 32, 0, 1};
+  int wall_tile_QNT = 0;
 
   int frame = 0;
   int frame_counter = 0;
 
   HITBOX *obj_mapa =
-      cria_mapa("images/dados.txt", wooden_crate_box, &wooden_crate_box_QNT);
+      cria_mapa("images/dados.txt", wall_tile, &wall_tile_QNT);
 
   bool running = true;
   bool moving = false;
@@ -98,30 +100,31 @@ int main()
       {
         // aplicaçao do incremento
         normal_vetor(&personagem);
-        colision(obj_mapa, wooden_crate_box_QNT, &personagem);
+        colision(obj_mapa, wall_tile_QNT, &personagem);
         personagem.posx += personagem.vec_velocidade.dx;
         personagem.posy += personagem.vec_velocidade.dy;
         // normalizacao vetor diagonal
 
-        //muda frames quando anda
+        // muda frames quando anda
         fps(&frame_counter, &frame, personagem.num_frames);
       }
       else
       {
         frame = 0; // Parado: usa quadro do meio
       }
-      al_clear_to_color(al_map_rgb(0, 0, 0));
+      al_clear_to_color(al_map_rgb(255, 255, 255));
+
       al_draw_bitmap_region(sprite, frame * personagem.sprite_w,
                             personagem.sprite_dir * personagem.sprite_h,
                             personagem.sprite_w, personagem.sprite_h,
                             personagem.posx, personagem.posy, 0);
 
       // Desenho dos objetos do mapa
-      for (int i = 0; i < wooden_crate_box_QNT; i++)
+      for (int i = 0; i < wall_tile_QNT; i++)
       {
         al_draw_bitmap_region(
-            wooden_crate_box.sprite, 0, 0, wooden_crate_box.sprite_w,
-            wooden_crate_box.sprite_h, obj_mapa[i].L, obj_mapa[i].U, 0);
+            wall_tile.sprite, 0, 0, wall_tile.sprite_w,
+            wall_tile.sprite_h, obj_mapa[i].L, obj_mapa[i].U, 0);
       }
       al_flip_display();
     }
@@ -130,7 +133,7 @@ int main()
 
   // Limpeza
   al_destroy_bitmap(sprite);
-  al_destroy_bitmap(wooden_crate);
+  al_destroy_bitmap(wall);
   al_destroy_timer(timer);
   al_destroy_event_queue(queue);
   al_destroy_display(disp);

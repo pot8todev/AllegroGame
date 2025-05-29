@@ -7,7 +7,7 @@
 #define COLUNAS 20
 #define TILE_SIZE 32
 
-int numeroDeObjeto(int matriz[LINHAS][COLUNAS], int parametro) {
+int numero_de_objetos(int matriz[LINHAS][COLUNAS], int parametro) {
   int i, j, count = 0;
   for (i = 0; i < LINHAS; i++) {
     for (j = 0; j < COLUNAS; j++) {
@@ -41,7 +41,7 @@ HITBOX *cria_mapa(char mapa[], OBJETO obj1, int *qnt_objeto) {
   }
   fclose(arquivo);
 
-  *qnt_objeto = numeroDeObjeto(matriz, 1); // por exemplo, 1 representa "caixas"
+  *qnt_objeto = numero_de_objetos(matriz, 1); // por exemplo, 1 representa "caixas"
   obj_mapa = malloc(*qnt_objeto * sizeof(HITBOX)); // prepara vetor de struct
 
   if (!obj_mapa)
@@ -51,7 +51,7 @@ HITBOX *cria_mapa(char mapa[], OBJETO obj1, int *qnt_objeto) {
     for (j = 0; j < COLUNAS; j++) {
       if (matriz[i][j] == 1) {
         obj_mapa[obj_num] =
-            create_hitbox(TILE_SIZE * i, TILE_SIZE * j, TILE_SIZE + 10, TILE_SIZE + 10);
+            create_hitbox(TILE_SIZE * j, TILE_SIZE * i, TILE_SIZE + 10, TILE_SIZE + 20);
 
         // Desenha na tela
         al_draw_bitmap_region(obj1.sprite, 0, 0, obj1.sprite_w, obj1.sprite_h,
