@@ -43,7 +43,7 @@ HITBOX *cria_mapa(char mapa[], OBJETO obj1, int *qnt_objeto) {
 
   *qnt_objeto = numeroDeObjeto(matriz, 1); // por exemplo, 1 representa "caixas"
   obj_mapa = malloc(*qnt_objeto * sizeof(HITBOX)); // prepara vetor de struct
-                                                   //
+
   if (!obj_mapa)
     return NULL;
 
@@ -51,7 +51,7 @@ HITBOX *cria_mapa(char mapa[], OBJETO obj1, int *qnt_objeto) {
     for (j = 0; j < COLUNAS; j++) {
       if (matriz[i][j] == 1) {
         obj_mapa[obj_num] =
-            create_hitbox(TILE_SIZE * i, TILE_SIZE * j, TILE_SIZE, TILE_SIZE);
+            create_hitbox(TILE_SIZE * i, TILE_SIZE * j, TILE_SIZE + 10, TILE_SIZE + 10);
 
         // Desenha na tela
         al_draw_bitmap_region(obj1.sprite, 0, 0, obj1.sprite_w, obj1.sprite_h,

@@ -2,24 +2,26 @@
 #include "../structures/objeto.h"
 #include <allegro5/allegro_image.h>
 #include <stdbool.h>
-HITBOX create_hitbox(float x, float y, float w, float h) {
+HITBOX create_hitbox(float x, float y, float w, float h)
+{
   HITBOX hb;
   hb.L = x;
-  hb.R = x + w*0.6;
+  hb.R = x + w * 0.6;
   hb.U = y;
-  hb.D = y + h/2;
+  hb.D = y + h / 2;
   return hb;
 }
 #include "colision.h"
 
-void colision(HITBOX *objetos, int num_objetos, OBJETO *personagem) {
-  for (int i = 0; i < num_objetos; i++) {
+void colision(HITBOX *objetos, int num_objetos, OBJETO *personagem)
+{
+  for (int i = 0; i < num_objetos; i++)
+  {
     HITBOX hitbox_personagem = create_hitbox(
-        personagem->posx + personagem->vecVelocidade.dx,
-        personagem->posy + personagem->vecVelocidade.dy,
+        personagem->posx + personagem->vec_velocidade.dx,
+        personagem->posy + personagem->vec_velocidade.dy,
         personagem->sprite_w,
-        personagem->sprite_h
-    );
+        personagem->sprite_h);
 
     HITBOX hitbox_obj = objetos[i];
 
@@ -29,15 +31,16 @@ void colision(HITBOX *objetos, int num_objetos, OBJETO *personagem) {
         hitbox_personagem.U < hitbox_obj.D &&
         hitbox_personagem.D > hitbox_obj.U;
 
-    if (colidiu) {
-      personagem->vecVelocidade.dx = 0;
-      personagem->vecVelocidade.dy = 0;
+    if (colidiu)
+    {
+      personagem->vec_velocidade.dx = 0;
+      personagem->vec_velocidade.dy = 0;
       break;
     }
   }
 }
-void limita_mapa(float *posx, float *posy, int maxdisplay_w, int maxdisplay_h,
-                 int sprite_w, int sprite_h) {
+void limita_mapa(float *posx, float *posy, int maxdisplay_w, int maxdisplay_h, int sprite_w, int sprite_h)
+{
   // Limita o personagem dentro da tela
   if (*posx < 0)
     *posx = 0;

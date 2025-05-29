@@ -2,7 +2,6 @@
 #define OBJETO_H
 
 #include <allegro5/allegro.h>
-
 typedef struct {
   float L;
   float R;
@@ -15,13 +14,13 @@ typedef struct {
   float dy;
   // modulo do vetor
   float velocidade;
-} VEC_VELOCIDADE;
+} vec_velocidade;
 
 typedef struct {
   ALLEGRO_BITMAP *sprite;
   float posx;
   float posy;
-  VEC_VELOCIDADE vec_velocidade;
+  vec_velocidade vec_velocidade;
   int sprite_dir;
   const int sprite_w;
   const int sprite_h;
