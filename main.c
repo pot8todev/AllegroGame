@@ -103,6 +103,7 @@ int main()
         personagem.posy += personagem.vec_velocidade.dy;
         // normalizacao vetor diagonal
 
+        //muda frames quando anda
         fps(&frame_counter, &frame, personagem.num_frames);
       }
       else
