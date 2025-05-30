@@ -107,11 +107,12 @@ int main() {
 
       desenha_Objeto("images/dados.txt", floor_tile, 0);
       // draw_floor("images/dados.txt", floor_tile);
+      desenha_Objeto("images/dados.txt", wall_tile, 1);
       al_draw_bitmap_region(sprite, frame * personagem.sprite_w,
                             personagem.sprite_dir * personagem.sprite_h,
                             personagem.sprite_w, personagem.sprite_h,
                             personagem.posx, personagem.posy, 0);
-      desenha_Objeto("images/dados.txt", wall_tile, 1);
+
       al_flip_display();
     }
     // ------------------------------------------------
