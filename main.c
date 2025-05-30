@@ -11,8 +11,7 @@
 #include <stdio.h>
 
 #define TOTAL_TIPOS_OBJETOS 2
-int main()
-{
+int main() {
   al_init();
   al_install_keyboard();
   al_init_image_addon();
@@ -25,8 +24,7 @@ int main()
   double speed = 1.0 / 40.0;
 
   ALLEGRO_DISPLAY *disp = al_create_display(maxdisplay_w, maxdisplay_h);
-  ALLEGRO_TIMER *timer =
-      al_create_timer(speed); // TODO deixar mais generico
+  ALLEGRO_TIMER *timer = al_create_timer(speed); // TODO deixar mais generico
   ALLEGRO_EVENT_QUEUE *queue = al_create_event_queue();
   ALLEGRO_BITMAP *sprite = al_load_bitmap("images/sprites.png");
   ALLEGRO_BITMAP *wall = al_load_bitmap("images/wall.png");
@@ -45,24 +43,21 @@ int main()
   // --- Variaveis de jogo ---
 
   OBJETO objetos[TOTAL_TIPOS_OBJETOS];
-  OBJETO personagem = {sprite, 576, 0, {0, 0, 4.0}, 0, 32, 32, 4, 1};
-  OBJETO wall_tile = {wall, 60, 60, {0, 0, 0}, 0, 32, 32, 0, 1};
-  OBJETO floor_tile = {floor, 60, 60, {0, 0, 0}, 0, 32, 32, 0, 1};
-  int wall_tile_QNT = 0;
+  OBJETO personagem = {sprite, 576, 0, {0, 0, 4.0}, 0, 32, 32, 4, 1, 1};
+  OBJETO wall_tile = {wall, 60, 60, {0, 0, 0}, 0, 32, 32, 0, 1, 0};
+  OBJETO floor_tile = {floor, 60, 60, {0, 0, 0}, 0, 32, 32, 0, 1, 0};
 
   int frame = 0;
   int frame_counter = 0;
-
-  HITBOX *obj_mapa =
-      cria_mapa("images/dados.txt", wall_tile, &wall_tile_QNT);
+  HITBOX *vetorHitbox_wall_tile =
+      inicia_vetorHitbox("images/dados.txt", &wall_tile, 1);
 
   bool running = true;
   bool moving = false;
 
   // -------------------------
 
-  while (running)
-  {
+  while (running) {
     al_wait_for_event(queue, &event);
 
     // Eventos de teclado
@@ -75,8 +70,7 @@ int main()
 
     // --- Lógica de movimento, direção e animação ---
 
-    if (event.type == ALLEGRO_EVENT_TIMER)
-    {
+    if (event.type == ALLEGRO_EVENT_TIMER) {
 
       personagem.vec_velocidade.dx = 0;
       personagem.vec_velocidade.dy = 0;
@@ -96,36 +90,28 @@ int main()
                   maxdisplay_h, personagem.sprite_w, personagem.sprite_h);
 
       // frame loop
-      if (moving)
-      {
+      if (moving) {
         // aplicaçao do incremento
         normal_vetor(&personagem);
-        colision(obj_mapa, wall_tile_QNT, &personagem);
+        colision(vetorHitbox_wall_tile, wall_tile.quantidade, &personagem);
         personagem.posx += personagem.vec_velocidade.dx;
         personagem.posy += personagem.vec_velocidade.dy;
         // normalizacao vetor diagonal
 
         // muda frames quando anda
         fps(&frame_counter, &frame, personagem.num_frames);
-      }
-      else
-      {
+      } else {
         frame = 0; // Parado: usa quadro do meio
       }
       al_clear_to_color(al_map_rgb(255, 255, 255));
 
-      draw_floor("images/dados.txt", floor_tile);
+      desenha_Objeto("images/dados.txt", floor_tile, 0);
+      // draw_floor("images/dados.txt", floor_tile);
       al_draw_bitmap_region(sprite, frame * personagem.sprite_w,
                             personagem.sprite_dir * personagem.sprite_h,
                             personagem.sprite_w, personagem.sprite_h,
                             personagem.posx, personagem.posy, 0);
-      // Desenho dos objetos do mapa
-      for (int i = 0; i < wall_tile_QNT; i++)
-      {
-        al_draw_bitmap_region(
-            wall_tile.sprite, 0, 0, wall_tile.sprite_w,
-            wall_tile.sprite_h, obj_mapa[i].L, obj_mapa[i].U, 0);
-      }
+      desenha_Objeto("images/dados.txt", wall_tile, 1);
       al_flip_display();
     }
     // ------------------------------------------------

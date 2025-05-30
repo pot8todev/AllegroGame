@@ -2,5 +2,5 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-HITBOX *cria_mapa(char mapa[], OBJETO obj1, int *qnt_objeto);
-void draw_floor(char mapa[], OBJETO floor);
+HITBOX *inicia_vetorHitbox(char mapa[], OBJETO *obj1, int parametroDeBusca);
+void desenha_Objeto(char mapa[], OBJETO floor, int parametroDeBusca);
