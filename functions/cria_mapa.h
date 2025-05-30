@@ -3,3 +3,4 @@
 #include <stdlib.h>
 
 HITBOX *cria_mapa(char mapa[], OBJETO obj1, int *qnt_objeto);
+void draw_floor(char mapa[], OBJETO floor);

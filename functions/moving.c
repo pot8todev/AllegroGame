@@ -35,7 +35,7 @@ void moving_test_left(bool keyTest, bool *moving, OBJETO *obj) {
 }
 void fps(int *frame_counter, int *frame, int num_frames) {
   (*frame_counter)++; // TODO local variable
-  if ((*frame_counter) >= 10) {
+  if ((*frame_counter) >= 5) {
     *frame = ((*frame) + 1) % num_frames;
     *frame_counter = 0;
   }

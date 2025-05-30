@@ -30,7 +30,7 @@ int main()
   ALLEGRO_EVENT_QUEUE *queue = al_create_event_queue();
   ALLEGRO_BITMAP *sprite = al_load_bitmap("images/sprites.png");
   ALLEGRO_BITMAP *wall = al_load_bitmap("images/wall.png");
-  ALLEGRO_BITMAP *floor = al_load_bitmap("images/floor.png");
+  ALLEGRO_BITMAP *floor = al_load_bitmap("images/floor1.png");
 
   bool keys[ALLEGRO_KEY_MAX] = {0};
 
@@ -45,7 +45,7 @@ int main()
   // --- Variaveis de jogo ---
 
   OBJETO objetos[TOTAL_TIPOS_OBJETOS];
-  OBJETO personagem = {sprite, 300, 200, {0, 0, 6.0}, 0, 32, 32, 4, 1};
+  OBJETO personagem = {sprite, 576, 0, {0, 0, 4.0}, 0, 32, 32, 4, 1};
   OBJETO wall_tile = {wall, 60, 60, {0, 0, 0}, 0, 32, 32, 0, 1};
   OBJETO floor_tile = {floor, 60, 60, {0, 0, 0}, 0, 32, 32, 0, 1};
   int wall_tile_QNT = 0;
@@ -114,11 +114,11 @@ int main()
       }
       al_clear_to_color(al_map_rgb(255, 255, 255));
 
+      draw_floor("images/dados.txt", floor_tile);
       al_draw_bitmap_region(sprite, frame * personagem.sprite_w,
                             personagem.sprite_dir * personagem.sprite_h,
                             personagem.sprite_w, personagem.sprite_h,
                             personagem.posx, personagem.posy, 0);
-
       // Desenho dos objetos do mapa
       for (int i = 0; i < wall_tile_QNT; i++)
       {
