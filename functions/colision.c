@@ -2,6 +2,7 @@
 #include "../structures/objeto.h"
 #include <allegro5/allegro_image.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <time.h>
 
 HITBOX create_hitbox(float x, float y, float w, float h) {
@@ -72,7 +73,8 @@ void colision_With_Reset(HITBOX *objetos, int num_objetos, OBJETO *personagem) {
     }
   }
 }
-void colision_Consumable(HITBOX *objetos, int num_objetos, OBJETO *personagem) {
+void colision_Consumable(HITBOX *objetos, int num_objetos, OBJETO *personagem,
+                         OBJETO *objeto) {
 
   HITBOX hitbox_pes_x = get_hitbox_pes_x(personagem);
   HITBOX hitbox_pes_y = geto_hitbox_pes_y(personagem);
@@ -83,7 +85,11 @@ void colision_Consumable(HITBOX *objetos, int num_objetos, OBJETO *personagem) {
     bool colidiu_x = testa_colisao(hitbox_pes_x, hitbox_obj);
     bool colidiu_y = testa_colisao(hitbox_pes_y, hitbox_obj);
     if ((colidiu_x || colidiu_y)) { // gameOver
-      personagem->posx = personagem->inicio.pos_init_x;
+      printf("colidiu\n");
+
+      // "remove" o objeto
+      objeto->vec_velocidade.velocidade = 4;
+      objetos[i] = (HITBOX){0, 0, 0, 0};
       break;
     }
   }

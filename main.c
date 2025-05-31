@@ -3,12 +3,16 @@
 #include "functions/cria_mapa.h"
 #include "functions/moving.h"
 #include "structures/objeto.h"
+
 #include <allegro5/allegro.h>
+#include <allegro5/allegro_acodec.h> // se for usar codecs de áudio
+#include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/keyboard.h>
+
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,7 +21,7 @@
 
 #define TOTAL_TIPOS_OBJETOS 2
 int main() {
-    srand(time(NULL));
+  srand(time(NULL));
   al_init();
   al_install_keyboard();
   al_init_image_addon();
@@ -25,6 +29,20 @@ int main() {
   al_init_ttf_addon();
   al_init_primitives_addon();
 
+  if (!al_install_audio()) {
+    fprintf(stderr, "Falha ao iniciar o subsistema de áudio\n");
+    return -1;
+  }
+
+  if (!al_init_acodec_addon()) {
+    fprintf(stderr, "Falha ao iniciar o addon de codecs de áudio\n");
+    return -1;
+  }
+
+  if (!al_install_audio()) {
+    fprintf(stderr, "Falha ao iniciar o subsistema de áudio\n");
+    return -1;
+  }
   int maxdisplay_w = 640;
   int maxdisplay_h = 640;
   double speed = 1.0 / 40.0;
@@ -32,14 +50,24 @@ int main() {
   int fase = 0;
   bool game_on = true;
   while (game_on) {
+    // Inicializações
     ALLEGRO_DISPLAY *disp = al_create_display(maxdisplay_w, maxdisplay_h);
-    ALLEGRO_TIMER *timer = al_create_timer(speed); // TODO deixar mais generico
+    ALLEGRO_TIMER *timer = al_create_timer(speed);
     ALLEGRO_EVENT_QUEUE *queue = al_create_event_queue();
     ALLEGRO_BITMAP *sprite = al_load_bitmap("images/sprites.png");
     ALLEGRO_BITMAP *wall = al_load_bitmap("images/wall.png");
     ALLEGRO_BITMAP *floor = al_load_bitmap("images/floor1.png");
     ALLEGRO_BITMAP *lava = al_load_bitmap("images/lava.png");
     ALLEGRO_BITMAP *fruits = al_load_bitmap("images/fruits.png");
+
+    // Música de fundo (looping)
+    ALLEGRO_SAMPLE *tacaca = al_load_sample("tacaca.wav");
+    if (!disp || !timer || !queue || !sprite || !wall || !floor || !lava ||
+        !fruits || !tacaca) {
+      fprintf(stderr, "Erro ao carregar algum recurso.\n");
+      return -1;
+    }
+    al_play_sample(tacaca, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);
     bool keys[ALLEGRO_KEY_MAX] = {0};
 
     al_register_event_source(queue, al_get_display_event_source(disp));
@@ -70,26 +98,27 @@ int main() {
 
     OBJETO lava_tile = {lava,      {0, 0},    0, 0,    {0, 0, 0}, 0,
                         TILE_SIZE, TILE_SIZE, 0, true, 0};
-    OBJETO fruits_tile = {fruits,      {0, 0},    0, 0,    {0, 0, 0}, 0,
-                        TILE_SIZE, TILE_SIZE, 0, true, 0};
-    int rand_fruit_tile_x = rand()%6;
-    int rand_fruit_tile_y = rand()%6;
+    OBJETO fruits_tile = {fruits,    {0, 0},    0, 0,    {0, 0, 0}, 0,
+                          TILE_SIZE, TILE_SIZE, 0, true, 0};
+    int rand_fruit_tile_x = rand() % 6;
+    int rand_fruit_tile_y = rand() % 6;
 
     int Step_Counter = 0;
     char *mapas[] = {"images/fase1.txt", "images/fase2.txt"};
-    char mapa_selecionado[50] ;
+    char mapa_selecionado[50];
 
     int frame = 0;
     int frame_counter = 0;
     HITBOX *vetorHitbox_wall_tile = NULL;
     HITBOX *vetorHitbox_lava_tile = NULL;
-    HITBOX *vetorHitbox_fruits_tile= NULL;
+    HITBOX *vetorHitbox_fruits_tile = NULL;
     strcpy(mapa_selecionado, mapas[fase]);
     vetorHitbox_wall_tile = inicia_vetorHitbox(mapa_selecionado, &wall_tile, 1);
     vetorHitbox_lava_tile = inicia_vetorHitbox(mapa_selecionado, &lava_tile, 2);
-    vetorHitbox_fruits_tile = inicia_vetorHitbox(mapa_selecionado, &fruits_tile, 4);
+    vetorHitbox_fruits_tile =
+        inicia_vetorHitbox(mapa_selecionado, &fruits_tile, 4);
 
-    int vetorPosInicio[][2] = {{576,0}, {100, 20}};
+    int vetorPosInicio[][2] = {{576, 0}, {100, 20}};
     personagem.inicio.pos_init_x = vetorPosInicio[fase][0];
     personagem.inicio.pos_init_y = vetorPosInicio[fase][1];
 
@@ -118,10 +147,10 @@ int main() {
         }
       } else if (event.type == ALLEGRO_EVENT_KEY_UP)
         keys[event.keyboard.keycode] = false;
-      else if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
+      else if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
 
-          fase_on = false;
-          game_on = false;
+        fase_on = false;
+        game_on = false;
       }
 
       // --- Lógica de movimento, direção e animação ---
@@ -149,8 +178,10 @@ int main() {
           // aplicaçao do incremento
           normal_vetor(&personagem);
           colision(vetorHitbox_wall_tile, wall_tile.quantidade, &personagem);
-          colision_With_Reset(vetorHitbox_lava_tile, lava_tile.quantidade, &personagem);
-          colision_Consumable(vetorHitbox_fruits_tile, fruits_tile.quantidade, &personagem);
+          colision_With_Reset(vetorHitbox_lava_tile, lava_tile.quantidade,
+                              &personagem);
+          colision_Consumable(vetorHitbox_fruits_tile, fruits_tile.quantidade,
+                              &personagem, &fruits_tile);
           if (personagem.vec_velocidade.dx != 0 ||
               personagem.vec_velocidade.dy != 0) {
 
@@ -167,12 +198,17 @@ int main() {
         }
         al_clear_to_color(al_map_rgb(255, 255, 255));
 
-        desenha_Objeto(mapa_selecionado, floor_tile, 0, 0,0);
-        desenha_Objeto(mapa_selecionado, wall_tile, 1,0,0);
-        desenha_Objeto(mapa_selecionado, lava_tile, 2, 0,0);
+        desenha_Objeto(mapa_selecionado, floor_tile, 0, 0, 0);
 
-
-        desenha_Objeto(mapa_selecionado,fruits_tile, 4, rand_fruit_tile_x *  TILE_SIZE, rand_fruit_tile_y* TILE_SIZE);
+        desenha_Objeto(mapa_selecionado, wall_tile, 1, 0, 0);
+        desenha_Objeto(mapa_selecionado, lava_tile, 2, 0, 0);
+        desenha_Objeto(mapa_selecionado, floor_tile, 4, 0, 0);
+        // TODO usar um outro parametro
+        if (fruits_tile.vec_velocidade.velocidade == 0) {
+          desenha_Objeto(mapa_selecionado, fruits_tile, 4,
+                         rand_fruit_tile_x * TILE_SIZE,
+                         rand_fruit_tile_y * TILE_SIZE);
+        }
         al_draw_bitmap_region(sprite, frame * personagem.sprite_w,
                               personagem.sprite_dir * personagem.sprite_h,
                               personagem.sprite_w, personagem.sprite_h,
@@ -185,7 +221,11 @@ int main() {
 
     free(vetorHitbox_lava_tile);
     free(vetorHitbox_wall_tile);
+
     // Limpeza
+
+    al_destroy_sample(tacaca);
+    al_uninstall_audio();
     al_destroy_bitmap(sprite);
     al_destroy_bitmap(wall);
     al_destroy_timer(timer);
