@@ -13,9 +13,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 #define TOTAL_TIPOS_OBJETOS 2
 int main() {
+    srand(time(NULL));
   al_init();
   al_install_keyboard();
   al_init_image_addon();
@@ -70,6 +72,8 @@ int main() {
                         TILE_SIZE, TILE_SIZE, 0, true, 0};
     OBJETO fruits_tile = {fruits,      {0, 0},    0, 0,    {0, 0, 0}, 0,
                         TILE_SIZE, TILE_SIZE, 0, true, 0};
+    int rand_fruit_tile_x = rand()%7;
+    int rand_fruit_tile_y = rand()%7;
 
     int Step_Counter = 0;
     char *mapas[] = {"images/fase1.txt", "images/fase2.txt"};
@@ -144,10 +148,9 @@ int main() {
         if (moving) {
           // aplicaçao do incremento
           normal_vetor(&personagem);
-          colision(vetorHitbox_wall_tile, wall_tile.quantidade, &personagem,
-                   false);
-          colision(vetorHitbox_lava_tile, lava_tile.quantidade, &personagem,
-                   true);
+          colision(vetorHitbox_wall_tile, wall_tile.quantidade, &personagem);
+          colision_With_Reset(vetorHitbox_lava_tile, lava_tile.quantidade, &personagem);
+          colision_Consumable(vetorHitbox_fruits_tile, fruits_tile.quantidade, &personagem);
           if (personagem.vec_velocidade.dx != 0 ||
               personagem.vec_velocidade.dy != 0) {
 
@@ -167,7 +170,9 @@ int main() {
         desenha_Objeto(mapa_selecionado, floor_tile, 0, 0,0);
         desenha_Objeto(mapa_selecionado, wall_tile, 1,0,0);
         desenha_Objeto(mapa_selecionado, lava_tile, 2, 0,0);
-        desenha_Objeto(mapa_selecionado,fruits_tile, 4, TILE_SIZE,TILE_SIZE);
+
+
+        desenha_Objeto(mapa_selecionado,fruits_tile, 4, rand_fruit_tile_x *  TILE_SIZE, rand_fruit_tile_y* TILE_SIZE);
         al_draw_bitmap_region(sprite, frame * personagem.sprite_w,
                               personagem.sprite_dir * personagem.sprite_h,
                               personagem.sprite_w, personagem.sprite_h,
