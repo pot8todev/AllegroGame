@@ -12,7 +12,9 @@ HITBOX create_hitbox(float x, float y, float w, float h) {
   hb.U = y;
   hb.D = y + h * 0.6;
   return hb;
-} // Calcula a hitbox dos pés com deslocamento X
+} 
+
+// Calcula a hitbox dos pés com deslocamento X
 HITBOX get_hitbox_pes_x(const OBJETO *p) {
   return create_hitbox(p->posx + p->vec_velocidade.dx,
                        p->posy + (p->sprite_h - PÉS_ALTURA), p->sprite_w,
@@ -36,6 +38,7 @@ bool testa_colisao(HITBOX a, HITBOX b) {
  * 3)olha todos os elementos do vetor hitbox e ve se houve a sobreposiçao
  * da hitbox_pes_personagem com hitbox_obj
  */
+
 void colision(HITBOX *objetosHITBOX, int num_objetos, OBJETO *personagem) {
   HITBOX hitbox_pes_x = get_hitbox_pes_x(personagem);
   HITBOX hitbox_pes_y = geto_hitbox_pes_y(personagem);
@@ -83,7 +86,7 @@ int colision_Consumable(HITBOX *objetos, int num_objetos, OBJETO *personagem,
     bool colidiu_x = testa_colisao(hitbox_pes_x, hitbox_obj);
     bool colidiu_y = testa_colisao(hitbox_pes_y, hitbox_obj);
     if ((colidiu_x || colidiu_y)) { // gameOver
-      printf("colidiu\n");
+      printf("coletado\n");
 
       // "remove" o objeto
       objetos[i] = (HITBOX){0, 0, 0, 0};

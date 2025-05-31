@@ -12,6 +12,7 @@ void moving_test_up(bool keyTest, bool *moving, OBJETO *obj) {
     *moving = true;
   }
 }
+
 void moving_test_down(bool keyTest, bool *moving, OBJETO *obj) {
   if (keyTest) {
     obj->vec_velocidade.dy = (obj->vec_velocidade.velocidade);
@@ -19,6 +20,7 @@ void moving_test_down(bool keyTest, bool *moving, OBJETO *obj) {
     *moving = true;
   }
 }
+
 void moving_test_right(bool keyTest, bool *moving, OBJETO *obj) {
   if (keyTest) {
     obj->vec_velocidade.dx = (obj->vec_velocidade.velocidade);
@@ -26,6 +28,7 @@ void moving_test_right(bool keyTest, bool *moving, OBJETO *obj) {
     *moving = true;
   }
 }
+
 void moving_test_left(bool keyTest, bool *moving, OBJETO *obj) {
   if (keyTest) {
     obj->vec_velocidade.dx = -(obj->vec_velocidade.velocidade);
@@ -33,13 +36,15 @@ void moving_test_left(bool keyTest, bool *moving, OBJETO *obj) {
     *moving = true;
   }
 }
+
 void fps(int *frame_counter, int *frame, int num_frames) {
-  (*frame_counter)++; // TODO local variable
+  (*frame_counter)++;
   if ((*frame_counter) >= 5) {
     *frame = ((*frame) + 1) % num_frames;
     *frame_counter = 0;
   }
 }
+
 void normal_vetor(OBJETO *obj) {
   if (obj->vec_velocidade.dx && obj->vec_velocidade.dy) {
     obj->vec_velocidade.dy /= sqrt(2);
