@@ -5,8 +5,6 @@
 #include "structures/objeto.h"
 
 #include <allegro5/allegro.h>
-#include <allegro5/allegro_acodec.h> // se for usar codecs de áudio
-#include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_primitives.h>
@@ -29,20 +27,6 @@ int main() {
   al_init_ttf_addon();
   al_init_primitives_addon();
 
-  if (!al_install_audio()) {
-    fprintf(stderr, "Falha ao iniciar o subsistema de áudio\n");
-    return -1;
-  }
-
-  if (!al_init_acodec_addon()) {
-    fprintf(stderr, "Falha ao iniciar o addon de codecs de áudio\n");
-    return -1;
-  }
-
-  if (!al_install_audio()) {
-    fprintf(stderr, "Falha ao iniciar o subsistema de áudio\n");
-    return -1;
-  }
   int maxdisplay_w = 640;
   int maxdisplay_h = 640;
   double speed = 1.0 / 40.0;
@@ -61,13 +45,11 @@ int main() {
     ALLEGRO_BITMAP *fruits = al_load_bitmap("images/fruits.png");
 
     // Música de fundo (looping)
-    ALLEGRO_SAMPLE *tacaca = al_load_sample("tacaca.wav");
     if (!disp || !timer || !queue || !sprite || !wall || !floor || !lava ||
-        !fruits || !tacaca) {
+        !fruits) {
       fprintf(stderr, "Erro ao carregar algum recurso.\n");
       return -1;
     }
-    al_play_sample(tacaca, 1.0, 0.0, 1.0, ALLEGRO_PLAYMODE_LOOP, NULL);
     bool keys[ALLEGRO_KEY_MAX] = {0};
 
     al_register_event_source(queue, al_get_display_event_source(disp));
@@ -224,8 +206,6 @@ int main() {
 
     // Limpeza
 
-    al_destroy_sample(tacaca);
-    al_uninstall_audio();
     al_destroy_bitmap(sprite);
     al_destroy_bitmap(wall);
     al_destroy_timer(timer);
