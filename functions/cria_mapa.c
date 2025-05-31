@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// funçao para ajudar alocaçao dinamica de "inicia_vetorHitbox"
 int numero_de_objetos(int matriz[LINHAS][COLUNAS], int parametro) {
   int i, j, count = 0;
   for (i = 0; i < LINHAS; i++) {
@@ -15,6 +16,7 @@ int numero_de_objetos(int matriz[LINHAS][COLUNAS], int parametro) {
   return count;
 }
 
+// quero que cada objeto tenha sua HITBOX propia
 HITBOX *inicia_vetorHitbox(char mapa[], OBJETO *obj1, int parametroDeBusca) {
   FILE *arquivo;
   int matriz[LINHAS][COLUNAS];
@@ -37,9 +39,7 @@ HITBOX *inicia_vetorHitbox(char mapa[], OBJETO *obj1, int parametroDeBusca) {
   }
   fclose(arquivo);
 
-  // Corrigido: uso de -> ao invés de ponto
   obj1->quantidade = numero_de_objetos(matriz, parametroDeBusca);
-
   if (obj1->colisao == 1) {
     obj_mapa = malloc(obj1->quantidade * sizeof(HITBOX));
     if (!obj_mapa)

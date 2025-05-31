@@ -28,7 +28,8 @@ int main() {
   double speed = 1.0 / 40.0;
 
   int fase = 0;
-  while (fase >= 0 && fase < 2) {
+  bool game_on = true;
+  while (game_on) {
     ALLEGRO_DISPLAY *disp = al_create_display(maxdisplay_w, maxdisplay_h);
     ALLEGRO_TIMER *timer = al_create_timer(speed); // TODO deixar mais generico
     ALLEGRO_EVENT_QUEUE *queue = al_create_event_queue();
@@ -69,7 +70,7 @@ int main() {
 
     int Step_Counter = 0;
     char *mapas[] = {"images/fase1.txt", "images/fase2.txt"};
-    char mapa_selecionado[50] = "banana";
+    char mapa_selecionado[50] ;
 
     int frame = 0;
     int frame_counter = 0;
@@ -79,16 +80,17 @@ int main() {
     vetorHitbox_wall_tile = inicia_vetorHitbox(mapa_selecionado, &wall_tile, 1);
     vetorHitbox_lava_tile = inicia_vetorHitbox(mapa_selecionado, &lava_tile, 2);
 
-    personagem.inicio.pos_init_x = 576;
-    personagem.inicio.pos_init_y = 0;
+    int vetorPosInicio[][2] = {{576,0}, {100, 20}};
+    personagem.inicio.pos_init_x = vetorPosInicio[fase][0];
+    personagem.inicio.pos_init_y = vetorPosInicio[fase][1];
 
     personagem.posx = personagem.inicio.pos_init_x;
     personagem.posy = personagem.inicio.pos_init_y;
-    bool its_on = true;
+    bool fase_on = true;
     bool moving = false;
     // -------------------------
 
-    while (its_on) {
+    while (fase_on) {
       al_wait_for_event(queue, &event);
 
       // Eventos de teclado
@@ -97,17 +99,21 @@ int main() {
 
         if (ALLEGRO_KEY_F1 == event.keyboard.keycode) {
           fase = (fase == 0) ? 1 : 0;
-          its_on = false;
+          fase_on = false;
         }
 
         if (ALLEGRO_KEY_ESCAPE == event.keyboard.keycode) {
           fase = -1;
-          its_on = false;
+          fase_on = false;
+          game_on = false;
         }
       } else if (event.type == ALLEGRO_EVENT_KEY_UP)
         keys[event.keyboard.keycode] = false;
-      else if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-        its_on = false;
+      else if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE){
+
+          fase_on = false;
+          game_on = false;
+      }
 
       // --- Lógica de movimento, direção e animação ---
       if (event.type == ALLEGRO_EVENT_TIMER) {
