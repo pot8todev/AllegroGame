@@ -23,15 +23,13 @@ int main() {
   al_init();
   al_install_keyboard();
   al_init_image_addon();
-  al_init_font_addon();
-  al_init_ttf_addon();
-  al_init_primitives_addon();
 
   int maxdisplay_w = 640;
   int maxdisplay_h = 640;
   double speed = 1.0 / 40.0;
 
   int fase = 0;
+
   bool game_on = true;
   while (game_on) {
     // Inicializações
@@ -44,12 +42,6 @@ int main() {
     ALLEGRO_BITMAP *lava = al_load_bitmap("images/lava.png");
     ALLEGRO_BITMAP *fruits = al_load_bitmap("images/fruits.png");
 
-    // Música de fundo (looping)
-    if (!disp || !timer || !queue || !sprite || !wall || !floor || !lava ||
-        !fruits) {
-      fprintf(stderr, "Erro ao carregar algum recurso.\n");
-      return -1;
-    }
     bool keys[ALLEGRO_KEY_MAX] = {0};
 
     al_register_event_source(queue, al_get_display_event_source(disp));
@@ -65,7 +57,7 @@ int main() {
     OBJETO objetos[TOTAL_TIPOS_OBJETOS];
     OBJETO personagem = {
         sprite,    {576, 0},               // POSICAO_INICIAL inicio;
-        0,         0,         {0, 0, 4.0}, // vec_velocidade
+        0,         0,         { 0, 0, 4.0}, // vec_velocidade
         0,                                 // int sprite_dir;
         TILE_SIZE, TILE_SIZE,
         4,    // const int sprite_w, sprite_h, num_frames;
@@ -83,6 +75,7 @@ int main() {
                         TILE_SIZE, TILE_SIZE, 0, true, true,      0};
     OBJETO fruits_tile = {fruits,    {0, 0},    0, 0,    {0, 0, 0}, 0,
                           TILE_SIZE, TILE_SIZE, 0, true, true,      0};
+    
     int rand_fruit_tile_x = rand() % 6;
     int rand_fruit_tile_y = rand() % 6;
     int INDEX_fruit_collision;
@@ -94,14 +87,16 @@ int main() {
 
     int frame = 0;
     int frame_counter = 0;
+
     HITBOX *vetorHitbox_wall_tile = NULL;
     HITBOX *vetorHitbox_lava_tile = NULL;
     HITBOX *vetorHitbox_fruits_tile = NULL;
+    
     strcpy(mapa_selecionado, mapas[fase]);
+    
     vetorHitbox_wall_tile = inicia_vetorHitbox(mapa_selecionado, &wall_tile, 1);
     vetorHitbox_lava_tile = inicia_vetorHitbox(mapa_selecionado, &lava_tile, 2);
-    vetorHitbox_fruits_tile =
-        inicia_vetorHitbox(mapa_selecionado, &fruits_tile, 4);
+    vetorHitbox_fruits_tile = inicia_vetorHitbox(mapa_selecionado, &fruits_tile, 4);
 
     int vetorPosInicio[][2] = {{576, 0}, {100, 20}, {200, 405}};
     personagem.inicio.pos_init_x = vetorPosInicio[fase][0];
@@ -133,7 +128,6 @@ int main() {
       } else if (event.type == ALLEGRO_EVENT_KEY_UP)
         keys[event.keyboard.keycode] = false;
       else if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE) {
-
         fase_on = false;
         game_on = false;
       }
@@ -149,11 +143,6 @@ int main() {
         moving_test_down(keys[ALLEGRO_KEY_DOWN], &moving, &personagem);
         moving_test_right(keys[ALLEGRO_KEY_RIGHT], &moving, &personagem);
         moving_test_left(keys[ALLEGRO_KEY_LEFT], &moving, &personagem);
-
-        moving_test_up(keys[ALLEGRO_KEY_W], &moving, &personagem);
-        moving_test_down(keys[ALLEGRO_KEY_S], &moving, &personagem);
-        moving_test_right(keys[ALLEGRO_KEY_D], &moving, &personagem);
-        moving_test_left(keys[ALLEGRO_KEY_A], &moving, &personagem);
 
         limita_mapa(&personagem.posx, &personagem.posy, maxdisplay_w,
                     maxdisplay_h, personagem.sprite_w, personagem.sprite_h);

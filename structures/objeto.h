@@ -14,6 +14,7 @@ typedef struct {
   float U;
   float D;
 } HITBOX;
+
 typedef struct {
   // incremento do movimento
   float dx;
