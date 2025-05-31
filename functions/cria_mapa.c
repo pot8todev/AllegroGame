@@ -3,10 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define LINHAS 20
-#define COLUNAS 20
-#define TILE_SIZE 32
-
 int numero_de_objetos(int matriz[LINHAS][COLUNAS], int parametro) {
   int i, j, count = 0;
   for (i = 0; i < LINHAS; i++) {

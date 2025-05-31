@@ -2,7 +2,8 @@
 #include "../structures/objeto.h"
 #include <allegro5/allegro_image.h>
 #include <stdbool.h>
-#define PÉS_ALTURA 12 // altura da hitbox dos pés (ajuste conforme necessário)
+#include <time.h>
+
 HITBOX create_hitbox(float x, float y, float w, float h) {
   HITBOX hb;
   hb.L = x;
@@ -13,7 +14,8 @@ HITBOX create_hitbox(float x, float y, float w, float h) {
 }
 #include "colision.h"
 
-void colision(HITBOX *objetos, int num_objetos, OBJETO *personagem) {
+void colision(HITBOX *objetos, int num_objetos, OBJETO *personagem,
+              bool reset) {
   for (int i = 0; i < num_objetos; i++) {
     int modulo = personagem->vec_velocidade.velocidade;
 
@@ -36,6 +38,11 @@ void colision(HITBOX *objetos, int num_objetos, OBJETO *personagem) {
     bool colidiu_y =
         hitbox_pes_y.L < hitbox_obj.R && hitbox_pes_y.R > hitbox_obj.L &&
         hitbox_pes_y.U < hitbox_obj.D && hitbox_pes_y.D > hitbox_obj.U;
+    if ((colidiu_x || colidiu_y) && reset == true) { // gameOver
+      personagem->posx = personagem->inicio.pos_init_x;
+      personagem->posy = personagem->inicio.pos_init_y;
+      break;
+    }
     if (colidiu_x) {
       personagem->vec_velocidade.dx = 0;
       break;

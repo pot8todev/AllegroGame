@@ -1,7 +1,13 @@
+#include <allegro5/allegro.h>
 #ifndef OBJETO_H
 #define OBJETO_H
 
-#include <allegro5/allegro.h>
+#define LINHAS 20
+#define COLUNAS 20
+#define TILE_SIZE 32
+
+#define PÉS_ALTURA 12 // altura da hitbox dos pés (ajuste conforme necessário)
+
 typedef struct {
   float L;
   float R;
@@ -17,7 +23,13 @@ typedef struct {
 } vec_velocidade;
 
 typedef struct {
+  // posiçao inicial do jogo
+  float pos_init_x;
+  float pos_init_y;
+} POSICAO_INICIAL;
+typedef struct {
   ALLEGRO_BITMAP *sprite;
+  POSICAO_INICIAL inicio;
   float posx;
   float posy;
   vec_velocidade vec_velocidade;

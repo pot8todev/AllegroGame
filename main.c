@@ -8,6 +8,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/keyboard.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -30,6 +31,7 @@ int main() {
   ALLEGRO_BITMAP *sprite = al_load_bitmap("images/sprites.png");
   ALLEGRO_BITMAP *wall = al_load_bitmap("images/wall.png");
   ALLEGRO_BITMAP *floor = al_load_bitmap("images/floor1.png");
+  ALLEGRO_BITMAP *lava = al_load_bitmap("images/lava.png");
 
   bool keys[ALLEGRO_KEY_MAX] = {0};
 
@@ -44,15 +46,38 @@ int main() {
   // --- Variaveis de jogo ---
 
   OBJETO objetos[TOTAL_TIPOS_OBJETOS];
-  OBJETO personagem = {sprite, 576, 0, {0, 0, 4.0}, 0, 32, 32, 4, 1, 1};
-  OBJETO wall_tile = {wall, 60, 60, {0, 0, 0}, 0, 32, 32, 0, 1, 0};
-  OBJETO floor_tile = {floor, 60, 60, {0, 0, 0}, 0, 32, 32, 0, 1, 0};
+  OBJETO personagem = {
+      sprite,   // ALLEGRO_BITMAP *sprite;
+      {576, 0}, // POSICAO_INICIAL inicio;
+      576,
+      0,           // float posx, float posy;
+      {0, 0, 4.0}, // vec_velocidade vec_velocidade;
+      0,           // int sprite_dir;
+      TILE_SIZE,
+      TILE_SIZE,
+      4,    // const int sprite_w, sprite_h, num_frames;
+      true, // const bool colisao;
+      1     // int quantidade;
+  };
+  OBJETO wall_tile = {wall,      {0, 0},    0,  0,    {0, 0, 0}, 0,
+                      TILE_SIZE, TILE_SIZE, -0, true, 0};
 
+  OBJETO floor_tile = {floor,     {0, 0},    0, 0,    {0, 0, 0}, 0,
+                       TILE_SIZE, TILE_SIZE, 0, true, 0};
+
+  OBJETO lava_tile = {lava,      {0, 0},    0, 0,    {0, 0, 0}, 0,
+                      TILE_SIZE, TILE_SIZE, 0, true, 0};
+  personagem.inicio.pos_init_x = 576;
+  personagem.inicio.pos_init_y = 0;
+
+  personagem.posx = personagem.inicio.pos_init_x;
+  personagem.posy = personagem.inicio.pos_init_y;
   int frame = 0;
   int frame_counter = 0;
   HITBOX *vetorHitbox_wall_tile =
       inicia_vetorHitbox("images/dados.txt", &wall_tile, 1);
-
+  HITBOX *vetorHitbox_lava_tile =
+      inicia_vetorHitbox("images/dados.txt", &lava_tile, 2);
   bool its_on = true;
   bool moving = false;
 
@@ -72,8 +97,8 @@ int main() {
     // --- Lógica de movimento, direção e animação ---
     if (event.type == ALLEGRO_EVENT_TIMER) {
 
-      // personagem.vec_velocidade.dx = 0;
-      // personagem.vec_velocidade.dy = 0;
+      personagem.vec_velocidade.dx = 0;
+      personagem.vec_velocidade.dy = 0;
       moving = false;
 
       moving_test_up(keys[ALLEGRO_KEY_UP], &moving, &personagem);
@@ -93,7 +118,10 @@ int main() {
       if (moving) {
         // aplicaçao do incremento
         normal_vetor(&personagem);
-        colision(vetorHitbox_wall_tile, wall_tile.quantidade, &personagem);
+        colision(vetorHitbox_wall_tile, wall_tile.quantidade, &personagem,
+                 false);
+        colision(vetorHitbox_lava_tile, lava_tile.quantidade, &personagem,
+                 true);
         personagem.posx += personagem.vec_velocidade.dx;
         personagem.posy += personagem.vec_velocidade.dy;
         // normalizacao vetor diagonal
@@ -108,6 +136,7 @@ int main() {
       desenha_Objeto("images/dados.txt", floor_tile, 0);
       // draw_floor("images/dados.txt", floor_tile);
       desenha_Objeto("images/dados.txt", wall_tile, 1);
+      desenha_Objeto("images/dados.txt", lava_tile, 2);
       al_draw_bitmap_region(sprite, frame * personagem.sprite_w,
                             personagem.sprite_dir * personagem.sprite_h,
                             personagem.sprite_w, personagem.sprite_h,
