@@ -88,7 +88,8 @@ int main() {
     int INDEX_fruit_collision;
 
     int Step_Counter = 0;
-    char *mapas[] = {"images/fase1.txt", "images/fase2.txt"};
+    char *mapas[] = {"images/fase1.txt", "images/fase2.txt",
+                     "images/fase3.txt"};
     char mapa_selecionado[50];
 
     int frame = 0;
@@ -102,7 +103,7 @@ int main() {
     vetorHitbox_fruits_tile =
         inicia_vetorHitbox(mapa_selecionado, &fruits_tile, 4);
 
-    int vetorPosInicio[][2] = {{576, 0}, {100, 20}};
+    int vetorPosInicio[][2] = {{576, 0}, {100, 20}, {200, 405}};
     personagem.inicio.pos_init_x = vetorPosInicio[fase][0];
     personagem.inicio.pos_init_y = vetorPosInicio[fase][1];
 
@@ -120,7 +121,7 @@ int main() {
         keys[event.keyboard.keycode] = true;
 
         if (ALLEGRO_KEY_F1 == event.keyboard.keycode) {
-          fase = (fase == 0) ? 1 : 0;
+          fase = (fase + 1) % 3;
           fase_on = false;
         }
 
@@ -189,7 +190,7 @@ int main() {
         desenha_Objeto(mapa_selecionado, lava_tile, 2, 0, 0);
         desenha_Objeto(mapa_selecionado, floor_tile, 4, 0, 0);
         // TODO usar um outro parametro
-        desenha_ObjetoHitbox(
+        desenha_Objeto_Consumivel(
             mapa_selecionado, fruits_tile, vetorHitbox_fruits_tile, 4,
             rand_fruit_tile_x * TILE_SIZE, rand_fruit_tile_y * TILE_SIZE);
         al_draw_bitmap_region(sprite, frame * personagem.sprite_w,

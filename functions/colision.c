@@ -48,11 +48,9 @@ void colision(HITBOX *objetosHITBOX, int num_objetos, OBJETO *personagem) {
 
     if (colidiu_x) {
       personagem->vec_velocidade.dx = 0;
-      break;
     }
     if (colidiu_y) {
       personagem->vec_velocidade.dy = 0;
-      break;
     }
   }
 }
@@ -96,13 +94,15 @@ int colision_Consumable(HITBOX *objetos, int num_objetos, OBJETO *personagem,
 }
 void limita_mapa(float *posx, float *posy, int maxdisplay_w, int maxdisplay_h,
                  int sprite_w, int sprite_h) {
-  // Limita o personagem dentro da tela
-  if (*posx < 0)
-    *posx = 0;
-  if (*posx > (maxdisplay_w - sprite_w))
-    *posx = (maxdisplay_w - sprite_w);
-  if (*posy < 0)
-    *posy = 0;
-  if (*posy > (maxdisplay_h - sprite_h))
-    *posy = (maxdisplay_h - sprite_h);
+  // Horizontal
+  if (*posx < -sprite_w)
+    *posx = maxdisplay_w;
+  else if (*posx > maxdisplay_w)
+    *posx = -sprite_w;
+
+  // Vertical
+  if (*posy < -sprite_h)
+    *posy = maxdisplay_h;
+  else if (*posy > maxdisplay_h)
+    *posy = -sprite_h;
 }

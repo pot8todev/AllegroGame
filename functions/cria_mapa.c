@@ -86,8 +86,8 @@ void desenha_Objeto(char mapa[], OBJETO obj, int parametroDeBusca, float sx,
     }
   }
 }
-void desenha_ObjetoHitbox(char mapa[], OBJETO obj, HITBOX *hitbox,
-                          int parametroDeBusca, float sx, float sy) {
+void desenha_Objeto_Consumivel(char mapa[], OBJETO obj, HITBOX *hitbox,
+                               int parametroDeBusca, float sx, float sy) {
   FILE *arquivo;
   int matriz[LINHAS][COLUNAS];
   int INDEX_fruit_collision = 0;
