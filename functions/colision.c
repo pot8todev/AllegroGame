@@ -73,8 +73,8 @@ void colision_With_Reset(HITBOX *objetos, int num_objetos, OBJETO *personagem) {
     }
   }
 }
-void colision_Consumable(HITBOX *objetos, int num_objetos, OBJETO *personagem,
-                         OBJETO *objeto) {
+int colision_Consumable(HITBOX *objetos, int num_objetos, OBJETO *personagem,
+                        OBJETO *objeto) {
 
   HITBOX hitbox_pes_x = get_hitbox_pes_x(personagem);
   HITBOX hitbox_pes_y = geto_hitbox_pes_y(personagem);
@@ -88,11 +88,11 @@ void colision_Consumable(HITBOX *objetos, int num_objetos, OBJETO *personagem,
       printf("colidiu\n");
 
       // "remove" o objeto
-      objeto->vec_velocidade.velocidade = 4;
       objetos[i] = (HITBOX){0, 0, 0, 0};
-      break;
+      return i;
     }
   }
+  return -1;
 }
 void limita_mapa(float *posx, float *posy, int maxdisplay_w, int maxdisplay_h,
                  int sprite_w, int sprite_h) {

@@ -27,6 +27,7 @@ typedef struct {
   float pos_init_x;
   float pos_init_y;
 } POSICAO_INICIAL;
+
 typedef struct {
   ALLEGRO_BITMAP *sprite;
   POSICAO_INICIAL inicio;
@@ -38,6 +39,7 @@ typedef struct {
   const int sprite_h;
   const int num_frames;
   const bool colisao;
+  bool visivel;
   int quantidade;
 } OBJETO;
 

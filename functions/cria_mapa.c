@@ -79,8 +79,42 @@ void desenha_Objeto(char mapa[], OBJETO obj, int parametroDeBusca, float sx,
   for (int i = 0; i < LINHAS; i++) {
     for (int j = 0; j < COLUNAS; j++) {
       if (matriz[i][j] == parametroDeBusca) {
-        al_draw_bitmap_region(obj.sprite, sx, sy, obj.sprite_w, obj.sprite_h,
-                              j * TILE_SIZE, i * TILE_SIZE, 0);
+        if (obj.visivel == true)
+          al_draw_bitmap_region(obj.sprite, sx, sy, obj.sprite_w, obj.sprite_h,
+                                j * TILE_SIZE, i * TILE_SIZE, 0);
+      }
+    }
+  }
+}
+void desenha_ObjetoHitbox(char mapa[], OBJETO obj, HITBOX *hitbox,
+                          int parametroDeBusca, float sx, float sy) {
+  FILE *arquivo;
+  int matriz[LINHAS][COLUNAS];
+  int INDEX_fruit_collision = 0;
+
+  arquivo = fopen(mapa, "r");
+
+  for (int i = 0; i < LINHAS; i++) {
+    for (int j = 0; j < COLUNAS; j++) {
+      if (fscanf(arquivo, "%d", &matriz[i][j]) != 1) {
+        fclose(arquivo);
+        return;
+      }
+    }
+  }
+  fclose(arquivo);
+
+  for (int i = 0; i < LINHAS; i++) {
+    for (int j = 0; j < COLUNAS; j++) {
+      if (matriz[i][j] == parametroDeBusca) {
+        if (!(hitbox[INDEX_fruit_collision].L == 0 &&
+              hitbox[INDEX_fruit_collision].R == 0 &&
+              hitbox[INDEX_fruit_collision].U == 0 &&
+              hitbox[INDEX_fruit_collision].D == 0))
+
+          al_draw_bitmap_region(obj.sprite, sx, sy, obj.sprite_w, obj.sprite_h,
+                                j * TILE_SIZE, i * TILE_SIZE, 0);
+        INDEX_fruit_collision++;
       }
     }
   }

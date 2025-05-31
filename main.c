@@ -70,20 +70,22 @@ int main() {
         TILE_SIZE, TILE_SIZE,
         4,    // const int sprite_w, sprite_h, num_frames;
         true, // const bool colisao;
+        true, // visivel
         1     //  quantidade, pode ser incrementada ao longo do codigo
     };
     OBJETO wall_tile = {wall,      {0, 0},    0,  0,    {0, 0, 0}, 0,
-                        TILE_SIZE, TILE_SIZE, -0, true, 0};
+                        TILE_SIZE, TILE_SIZE, -0, true, true,      0};
 
     OBJETO floor_tile = {floor,     {0, 0},    0, 0,    {0, 0, 0}, 0,
-                         TILE_SIZE, TILE_SIZE, 0, true, 0};
+                         TILE_SIZE, TILE_SIZE, 0, true, true,      0};
 
     OBJETO lava_tile = {lava,      {0, 0},    0, 0,    {0, 0, 0}, 0,
-                        TILE_SIZE, TILE_SIZE, 0, true, 0};
+                        TILE_SIZE, TILE_SIZE, 0, true, true,      0};
     OBJETO fruits_tile = {fruits,    {0, 0},    0, 0,    {0, 0, 0}, 0,
-                          TILE_SIZE, TILE_SIZE, 0, true, 0};
+                          TILE_SIZE, TILE_SIZE, 0, true, true,      0};
     int rand_fruit_tile_x = rand() % 6;
     int rand_fruit_tile_y = rand() % 6;
+    int INDEX_fruit_collision;
 
     int Step_Counter = 0;
     char *mapas[] = {"images/fase1.txt", "images/fase2.txt"};
@@ -162,8 +164,9 @@ int main() {
           colision(vetorHitbox_wall_tile, wall_tile.quantidade, &personagem);
           colision_With_Reset(vetorHitbox_lava_tile, lava_tile.quantidade,
                               &personagem);
-          colision_Consumable(vetorHitbox_fruits_tile, fruits_tile.quantidade,
-                              &personagem, &fruits_tile);
+          INDEX_fruit_collision = colision_Consumable(
+              vetorHitbox_fruits_tile, fruits_tile.quantidade, &personagem,
+              &fruits_tile);
           if (personagem.vec_velocidade.dx != 0 ||
               personagem.vec_velocidade.dy != 0) {
 
@@ -186,11 +189,9 @@ int main() {
         desenha_Objeto(mapa_selecionado, lava_tile, 2, 0, 0);
         desenha_Objeto(mapa_selecionado, floor_tile, 4, 0, 0);
         // TODO usar um outro parametro
-        if (fruits_tile.vec_velocidade.velocidade == 0) {
-          desenha_Objeto(mapa_selecionado, fruits_tile, 4,
-                         rand_fruit_tile_x * TILE_SIZE,
-                         rand_fruit_tile_y * TILE_SIZE);
-        }
+        desenha_ObjetoHitbox(
+            mapa_selecionado, fruits_tile, vetorHitbox_fruits_tile, 4,
+            rand_fruit_tile_x * TILE_SIZE, rand_fruit_tile_y * TILE_SIZE);
         al_draw_bitmap_region(sprite, frame * personagem.sprite_w,
                               personagem.sprite_dir * personagem.sprite_h,
                               personagem.sprite_w, personagem.sprite_h,
