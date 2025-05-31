@@ -72,8 +72,8 @@ int main() {
                         TILE_SIZE, TILE_SIZE, 0, true, 0};
     OBJETO fruits_tile = {fruits,      {0, 0},    0, 0,    {0, 0, 0}, 0,
                         TILE_SIZE, TILE_SIZE, 0, true, 0};
-    int rand_fruit_tile_x = rand()%7;
-    int rand_fruit_tile_y = rand()%7;
+    int rand_fruit_tile_x = rand()%6;
+    int rand_fruit_tile_y = rand()%6;
 
     int Step_Counter = 0;
     char *mapas[] = {"images/fase1.txt", "images/fase2.txt"};
