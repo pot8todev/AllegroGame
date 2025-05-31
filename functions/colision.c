@@ -17,19 +17,30 @@ void colision(HITBOX *objetos, int num_objetos, OBJETO *personagem) {
   for (int i = 0; i < num_objetos; i++) {
     int modulo = personagem->vec_velocidade.velocidade;
 
-    HITBOX hitbox_pes =
+    HITBOX hitbox_pes_x =
         create_hitbox(personagem->posx + personagem->vec_velocidade.dx,
+                      personagem->posy + personagem->sprite_h - PÉS_ALTURA,
+                      personagem->sprite_w, PÉS_ALTURA);
+    HITBOX hitbox_pes_y =
+        create_hitbox(personagem->posx,
                       personagem->posy + personagem->vec_velocidade.dy +
                           personagem->sprite_h - PÉS_ALTURA,
                       personagem->sprite_w, PÉS_ALTURA);
 
     HITBOX hitbox_obj = objetos[i];
 
-    bool colidiu = hitbox_pes.L < hitbox_obj.R && hitbox_pes.R > hitbox_obj.L &&
-                   hitbox_pes.U < hitbox_obj.D && hitbox_pes.D > hitbox_obj.U;
+    bool colidiu_x =
+        hitbox_pes_x.L < hitbox_obj.R && hitbox_pes_x.R > hitbox_obj.L &&
+        hitbox_pes_x.U < hitbox_obj.D && hitbox_pes_x.D > hitbox_obj.U;
 
-    if (colidiu) {
+    bool colidiu_y =
+        hitbox_pes_y.L < hitbox_obj.R && hitbox_pes_y.R > hitbox_obj.L &&
+        hitbox_pes_y.U < hitbox_obj.D && hitbox_pes_y.D > hitbox_obj.U;
+    if (colidiu_x) {
       personagem->vec_velocidade.dx = 0;
+      break;
+    }
+    if (colidiu_y) {
       personagem->vec_velocidade.dy = 0;
       break;
     }

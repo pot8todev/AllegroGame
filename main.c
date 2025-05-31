@@ -9,6 +9,7 @@
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/keyboard.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define TOTAL_TIPOS_OBJETOS 2
 int main() {
@@ -52,12 +53,12 @@ int main() {
   HITBOX *vetorHitbox_wall_tile =
       inicia_vetorHitbox("images/dados.txt", &wall_tile, 1);
 
-  bool running = true;
+  bool its_on = true;
   bool moving = false;
 
   // -------------------------
 
-  while (running) {
+  while (its_on) {
     al_wait_for_event(queue, &event);
 
     // Eventos de teclado
@@ -66,14 +67,13 @@ int main() {
     else if (event.type == ALLEGRO_EVENT_KEY_UP)
       keys[event.keyboard.keycode] = false;
     else if (event.type == ALLEGRO_EVENT_DISPLAY_CLOSE)
-      running = false;
+      its_on = false;
 
     // --- Lógica de movimento, direção e animação ---
-
     if (event.type == ALLEGRO_EVENT_TIMER) {
 
-      personagem.vec_velocidade.dx = 0;
-      personagem.vec_velocidade.dy = 0;
+      // personagem.vec_velocidade.dx = 0;
+      // personagem.vec_velocidade.dy = 0;
       moving = false;
 
       moving_test_up(keys[ALLEGRO_KEY_UP], &moving, &personagem);
