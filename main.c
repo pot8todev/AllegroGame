@@ -37,6 +37,7 @@ int main() {
     ALLEGRO_BITMAP *wall = al_load_bitmap("images/wall.png");
     ALLEGRO_BITMAP *floor = al_load_bitmap("images/floor1.png");
     ALLEGRO_BITMAP *lava = al_load_bitmap("images/lava.png");
+    ALLEGRO_BITMAP *fruits = al_load_bitmap("images/fruits.png");
     bool keys[ALLEGRO_KEY_MAX] = {0};
 
     al_register_event_source(queue, al_get_display_event_source(disp));
@@ -57,7 +58,7 @@ int main() {
         TILE_SIZE, TILE_SIZE,
         4,    // const int sprite_w, sprite_h, num_frames;
         true, // const bool colisao;
-        1     // int quantidade;
+        1     //  quantidade, pode ser incrementada ao longo do codigo
     };
     OBJETO wall_tile = {wall,      {0, 0},    0,  0,    {0, 0, 0}, 0,
                         TILE_SIZE, TILE_SIZE, -0, true, 0};
@@ -66,6 +67,8 @@ int main() {
                          TILE_SIZE, TILE_SIZE, 0, true, 0};
 
     OBJETO lava_tile = {lava,      {0, 0},    0, 0,    {0, 0, 0}, 0,
+                        TILE_SIZE, TILE_SIZE, 0, true, 0};
+    OBJETO fruits_tile = {fruits,      {0, 0},    0, 0,    {0, 0, 0}, 0,
                         TILE_SIZE, TILE_SIZE, 0, true, 0};
 
     int Step_Counter = 0;
@@ -76,9 +79,11 @@ int main() {
     int frame_counter = 0;
     HITBOX *vetorHitbox_wall_tile = NULL;
     HITBOX *vetorHitbox_lava_tile = NULL;
+    HITBOX *vetorHitbox_fruits_tile= NULL;
     strcpy(mapa_selecionado, mapas[fase]);
     vetorHitbox_wall_tile = inicia_vetorHitbox(mapa_selecionado, &wall_tile, 1);
     vetorHitbox_lava_tile = inicia_vetorHitbox(mapa_selecionado, &lava_tile, 2);
+    vetorHitbox_fruits_tile = inicia_vetorHitbox(mapa_selecionado, &fruits_tile, 4);
 
     int vetorPosInicio[][2] = {{576,0}, {100, 20}};
     personagem.inicio.pos_init_x = vetorPosInicio[fase][0];
@@ -159,9 +164,10 @@ int main() {
         }
         al_clear_to_color(al_map_rgb(255, 255, 255));
 
-        desenha_Objeto(mapa_selecionado, floor_tile, 0);
-        desenha_Objeto(mapa_selecionado, wall_tile, 1);
-        desenha_Objeto(mapa_selecionado, lava_tile, 2);
+        desenha_Objeto(mapa_selecionado, floor_tile, 0, 0,0);
+        desenha_Objeto(mapa_selecionado, wall_tile, 1,0,0);
+        desenha_Objeto(mapa_selecionado, lava_tile, 2, 0,0);
+        desenha_Objeto(mapa_selecionado,fruits_tile, 4, TILE_SIZE,TILE_SIZE);
         al_draw_bitmap_region(sprite, frame * personagem.sprite_w,
                               personagem.sprite_dir * personagem.sprite_h,
                               personagem.sprite_w, personagem.sprite_h,

@@ -59,7 +59,8 @@ HITBOX *inicia_vetorHitbox(char mapa[], OBJETO *obj1, int parametroDeBusca) {
   return obj_mapa;
 }
 
-void desenha_Objeto(char mapa[], OBJETO obj, int parametroDeBusca) {
+void desenha_Objeto(char mapa[], OBJETO obj, int parametroDeBusca, float sx,
+                    float sy) {
   FILE *arquivo;
   int matriz[LINHAS][COLUNAS];
 
@@ -78,7 +79,7 @@ void desenha_Objeto(char mapa[], OBJETO obj, int parametroDeBusca) {
   for (int i = 0; i < LINHAS; i++) {
     for (int j = 0; j < COLUNAS; j++) {
       if (matriz[i][j] == parametroDeBusca) {
-        al_draw_bitmap_region(obj.sprite, 0, 0, obj.sprite_w, obj.sprite_h,
+        al_draw_bitmap_region(obj.sprite, sx, sy, obj.sprite_w, obj.sprite_h,
                               j * TILE_SIZE, i * TILE_SIZE, 0);
       }
     }
