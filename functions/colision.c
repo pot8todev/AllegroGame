@@ -12,7 +12,7 @@ HITBOX create_hitbox(float x, float y, float w, float h) {
   hb.U = y;
   hb.D = y + h * 0.6;
   return hb;
-} 
+}
 
 // Calcula a hitbox dos pés com deslocamento X
 HITBOX get_hitbox_pes_x(const OBJETO *p) {
@@ -74,8 +74,8 @@ void colision_With_Reset(HITBOX *objetos, int num_objetos, OBJETO *personagem) {
     }
   }
 }
-int colision_Consumable(HITBOX *objetos, int num_objetos, OBJETO *personagem,
-                        OBJETO *objeto) {
+void colision_Consumable(HITBOX *objetos, int num_objetos, OBJETO *personagem,
+                         OBJETO *objeto) {
 
   HITBOX hitbox_pes_x = get_hitbox_pes_x(personagem);
   HITBOX hitbox_pes_y = geto_hitbox_pes_y(personagem);
@@ -90,10 +90,10 @@ int colision_Consumable(HITBOX *objetos, int num_objetos, OBJETO *personagem,
 
       // "remove" o objeto
       objetos[i] = (HITBOX){0, 0, 0, 0};
-      return i;
+      return;
     }
   }
-  return -1;
+  return;
 }
 void limita_mapa(float *posx, float *posy, int maxdisplay_w, int maxdisplay_h,
                  int sprite_w, int sprite_h) {
