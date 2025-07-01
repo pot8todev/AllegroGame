@@ -81,8 +81,8 @@ int main() {
     int rand_fruit_tile_y = rand() % 6;
 
     // endereço das fases do jogo
-    char *mapas[] = {"images/fase1.txt", "images/fase2.txt",
-                     "images/fase3.txt"};
+    char *mapas[] = {"images/fase1.txt", "images/fase2.txt", "images/fase3.txt",
+                     "images/fase4.txt", "images/fase5.txt"};
     char mapa_selecionado[50];
 
     int frame = 0;
@@ -100,7 +100,8 @@ int main() {
         inicia_vetorHitbox(mapa_selecionado, &fruits_tile, 4);
 
     // posiçåo inicial do personagem em cada fase
-    int vetorPosInicio[][2] = {{576, 0}, {100, 20}, {200, 405}};
+    int vetorPosInicio[][2] = {
+        {576, 0}, {100, 20}, {200, 405}, {200, 405}, {200, 405}};
     personagem.inicio.pos_init_x = vetorPosInicio[fase][0];
     personagem.inicio.pos_init_y = vetorPosInicio[fase][1];
 
@@ -118,7 +119,7 @@ int main() {
         keys[event.keyboard.keycode] = true;
 
         if (ALLEGRO_KEY_F1 == event.keyboard.keycode) {
-          fase = (fase + 1) % 3;
+          fase = (fase + 1) % 5;
           fase_on = false;
         }
 
