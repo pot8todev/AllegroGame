@@ -8,27 +8,22 @@
 
 mapa *cria_no(char endereco[50], int num_fase, mapa *proxima_fase) {
   mapa *fase_atual = malloc(sizeof(mapa));
-  if (!fase_atual) {
-    fprintf(stderr, "Erro ao alocar memória\n");
-    exit(EXIT_FAILURE);
-  }
 
-  strcpy(fase_atual->endereco, endereco);
-  fase_atual->fase = num_fase;
+  strcpy(fase_atual->endereco, endereco); // copia o parâmetro para o campo
+  fase_atual->num_fase = num_fase;
   fase_atual->proxima_fase = proxima_fase;
   return fase_atual;
 }
-
 mapa *vetor_para_lista_circular(char *vetor_mapas[], int size) {
   mapa *head = cria_no(vetor_mapas[0], 0, NULL);
   mapa *tail = head;
 
   for (int i = 1; i < size; i++) {
     tail->proxima_fase = cria_no(vetor_mapas[i], i, NULL);
-    tail = tail->proxima_fase;
+    tail = tail->proxima_fase; // primeiro atualiza o tail
   }
 
-  tail->proxima_fase = head; // lista circular
+  tail->proxima_fase = head; // fecha a lista circular
 
   return head;
 }

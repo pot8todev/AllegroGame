@@ -28,11 +28,10 @@ int main() {
   int maxdisplay_h = 640;
   double speed = 1.0 / 40.0;
 
-
-    char *mapas[] = {"images/fase1.txt", "images/fase2.txt", "images/fase3.txt",
-                     "images/fase4.txt", "images/fase5.txt"};
-    int num_mapas = sizeof(mapas)/ sizeof(mapas[0]);
-    mapa* fase_selecionada = vetor_para_lista_circular(mapas, num_mapas);
+  char *mapas[] = {"images/fase1.txt", "images/fase2.txt", "images/fase3.txt",
+                   "images/fase4.txt", "images/fase5.txt"};
+  int num_mapas = sizeof(mapas) / sizeof(mapas[0]);
+  mapa *fase_selecionada = vetor_para_lista_circular(mapas, num_mapas);
 
   bool game_on = true;
 
@@ -86,7 +85,6 @@ int main() {
 
     // endereço das fases do jogo
 
-
     int frame = 0;
     int frame_counter = 0;
 
@@ -94,22 +92,29 @@ int main() {
     HITBOX *vetorHitbox_lava_tile = NULL;
     HITBOX *vetorHitbox_fruits_tile = NULL;
 
-    char mapa_selecionado[50];
-    strcpy(mapa_selecionado, fase_selecionada->endereco);
-
-    vetorHitbox_wall_tile = inicia_vetorHitbox(mapa_selecionado, &wall_tile, 1);
-    vetorHitbox_lava_tile = inicia_vetorHitbox(mapa_selecionado, &lava_tile, 2);
+    vetorHitbox_wall_tile =
+        inicia_vetorHitbox(fase_selecionada->endereco, &wall_tile, 1);
+    vetorHitbox_lava_tile =
+        inicia_vetorHitbox(fase_selecionada->endereco, &lava_tile, 2);
     vetorHitbox_fruits_tile =
-        inicia_vetorHitbox(mapa_selecionado, &fruits_tile, 4);
+        inicia_vetorHitbox(fase_selecionada->endereco, &fruits_tile, 4);
 
     // posiçåo inicial do personagem em cada fase
-    int vetorPosInicio[][2] = {
-        {576, 0}, {100, 20}, {200, 405}, {200, 405}, {200, 405}};
-    personagem.inicio.pos_init_x = vetorPosInicio[fase_selecionada->fase][0];
-    personagem.inicio.pos_init_y = vetorPosInicio[fase_selecionada->fase][1];
+  int vetorPosInicioPersonagem[][2] = {
+      {576, 0}, 
+      {100, 20}, 
+      {200, 405},
+      {200, 405},
+      {200, 405}};
+
+    personagem.inicio.pos_init_x =
+        vetorPosInicioPersonagem[fase_selecionada->num_fase][0];
+    personagem.inicio.pos_init_y =
+        vetorPosInicioPersonagem[fase_selecionada->num_fase][1];
 
     personagem.posx = personagem.inicio.pos_init_x;
     personagem.posy = personagem.inicio.pos_init_y;
+
     bool fase_on = true;
     bool moving = false;
     // -------------------------
@@ -122,7 +127,7 @@ int main() {
         keys[event.keyboard.keycode] = true;
 
         if (ALLEGRO_KEY_F1 == event.keyboard.keycode) {
-            fase_selecionada = fase_selecionada->proxima_fase;
+          fase_selecionada = fase_selecionada->proxima_fase;
           fase_on = false;
         }
 
@@ -181,14 +186,14 @@ int main() {
 
         al_clear_to_color(al_map_rgb(255, 255, 255));
 
-        desenha_Objeto(mapa_selecionado, floor_tile, 0, 0, 0);
+        desenha_Objeto(fase_selecionada->endereco, floor_tile, 0, 0, 0);
 
-        desenha_Objeto(mapa_selecionado, wall_tile, 1, 0, 0);
-        desenha_Objeto(mapa_selecionado, lava_tile, 2, 0, 0);
-        desenha_Objeto(mapa_selecionado, floor_tile, 4, 0, 0);
+        desenha_Objeto(fase_selecionada->endereco, wall_tile, 1, 0, 0);
+        desenha_Objeto(fase_selecionada->endereco, lava_tile, 2, 0, 0);
+        desenha_Objeto(fase_selecionada->endereco, floor_tile, 4, 0, 0);
         // TODO usar um outro parametro
         desenha_Objeto_Consumivel(
-            mapa_selecionado, fruits_tile, vetorHitbox_fruits_tile, 4,
+            fase_selecionada->endereco, fruits_tile, vetorHitbox_fruits_tile, 4,
             rand_fruit_tile_x * TILE_SIZE, rand_fruit_tile_y * TILE_SIZE);
         al_draw_bitmap_region(sprite, frame * personagem.sprite_w,
                               personagem.sprite_dir * personagem.sprite_h,
@@ -211,7 +216,7 @@ int main() {
     al_destroy_timer(timer);
     al_destroy_event_queue(queue);
     al_destroy_display(disp);
-    printf("\n%d\n", fase_selecionada->fase);
+    printf("\n%d\n", fase_selecionada->num_fase);
   }
   return 0;
 }

@@ -10,7 +10,7 @@
 
 typedef struct mapa {
   char endereco[50];
-  int fase; // numero da fase
+  int num_fase; // numero da fase
   struct mapa *proxima_fase;
 
 } mapa;
