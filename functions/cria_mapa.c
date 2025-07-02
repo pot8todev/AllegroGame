@@ -2,8 +2,36 @@
 #include "colision.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 // funçao para ajudar alocaçao dinamica de "inicia_vetorHitbox"
+
+mapa *cria_no(char endereco[50], int num_fase, mapa *proxima_fase) {
+  mapa *fase_atual = malloc(sizeof(mapa));
+  if (!fase_atual) {
+    fprintf(stderr, "Erro ao alocar memória\n");
+    exit(EXIT_FAILURE);
+  }
+
+  strcpy(fase_atual->endereco, endereco);
+  fase_atual->fase = num_fase;
+  fase_atual->proxima_fase = proxima_fase;
+  return fase_atual;
+}
+
+mapa *vetor_para_lista_circular(char *vetor_mapas[], int size) {
+  mapa *head = cria_no(vetor_mapas[0], 0, NULL);
+  mapa *tail = head;
+
+  for (int i = 1; i < size; i++) {
+    tail->proxima_fase = cria_no(vetor_mapas[i], i, NULL);
+    tail = tail->proxima_fase;
+  }
+
+  tail->proxima_fase = head; // lista circular
+
+  return head;
+}
 int numero_de_objetos(int matriz[LINHAS][COLUNAS], int parametro) {
   int i, j, count = 0;
   for (i = 0; i < LINHAS; i++) {

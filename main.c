@@ -28,7 +28,11 @@ int main() {
   int maxdisplay_h = 640;
   double speed = 1.0 / 40.0;
 
-  int fase = 0;
+
+    char *mapas[] = {"images/fase1.txt", "images/fase2.txt", "images/fase3.txt",
+                     "images/fase4.txt", "images/fase5.txt"};
+    int num_mapas = sizeof(mapas)/ sizeof(mapas[0]);
+    mapa* fase_selecionada = vetor_para_lista_circular(mapas, num_mapas);
 
   bool game_on = true;
 
@@ -81,9 +85,7 @@ int main() {
     int rand_fruit_tile_y = rand() % 6;
 
     // endereço das fases do jogo
-    char *mapas[] = {"images/fase1.txt", "images/fase2.txt", "images/fase3.txt",
-                     "images/fase4.txt", "images/fase5.txt"};
-    char mapa_selecionado[50];
+
 
     int frame = 0;
     int frame_counter = 0;
@@ -92,7 +94,8 @@ int main() {
     HITBOX *vetorHitbox_lava_tile = NULL;
     HITBOX *vetorHitbox_fruits_tile = NULL;
 
-    strcpy(mapa_selecionado, mapas[fase]);
+    char mapa_selecionado[50];
+    strcpy(mapa_selecionado, fase_selecionada->endereco);
 
     vetorHitbox_wall_tile = inicia_vetorHitbox(mapa_selecionado, &wall_tile, 1);
     vetorHitbox_lava_tile = inicia_vetorHitbox(mapa_selecionado, &lava_tile, 2);
@@ -102,8 +105,8 @@ int main() {
     // posiçåo inicial do personagem em cada fase
     int vetorPosInicio[][2] = {
         {576, 0}, {100, 20}, {200, 405}, {200, 405}, {200, 405}};
-    personagem.inicio.pos_init_x = vetorPosInicio[fase][0];
-    personagem.inicio.pos_init_y = vetorPosInicio[fase][1];
+    personagem.inicio.pos_init_x = vetorPosInicio[fase_selecionada->fase][0];
+    personagem.inicio.pos_init_y = vetorPosInicio[fase_selecionada->fase][1];
 
     personagem.posx = personagem.inicio.pos_init_x;
     personagem.posy = personagem.inicio.pos_init_y;
@@ -119,7 +122,7 @@ int main() {
         keys[event.keyboard.keycode] = true;
 
         if (ALLEGRO_KEY_F1 == event.keyboard.keycode) {
-          fase = (fase + 1) % 5;
+            fase_selecionada = fase_selecionada->proxima_fase;
           fase_on = false;
         }
 
@@ -208,7 +211,7 @@ int main() {
     al_destroy_timer(timer);
     al_destroy_event_queue(queue);
     al_destroy_display(disp);
-    printf("\n%d\n", fase);
+    printf("\n%d\n", fase_selecionada->fase);
   }
   return 0;
 }

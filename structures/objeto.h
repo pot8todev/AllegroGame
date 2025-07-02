@@ -8,6 +8,12 @@
 
 #define PÉS_ALTURA 12 // altura da hitbox dos pés (ajuste conforme necessário)
 
+typedef struct mapa {
+  char endereco[50];
+  int fase; // numero da fase
+  struct mapa *proxima_fase;
+
+} mapa;
 typedef struct {
   float L;
   float R;
