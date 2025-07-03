@@ -90,9 +90,7 @@ void colision_Consumable(HITBOX *objetos, int num_objetos, OBJETO *personagem,
 
       // "remove" o objeto
       objetos[i] = (HITBOX){0, 0, 0, 0};
-      objeto->quantidade--;
 
-      printf("\n%d", objeto->quantidade);
       return;
     }
   }
