@@ -37,7 +37,7 @@ int main() {
       {576, 0}, {100, 20}, {200, 405}, {200, 405}, {200, 405}};
 
   int vetorPosInicioInimigoLava[][2] = {
-      {120, 50}, {300, 120}, {480, 200}, {150, 360}, {590, 410}};
+      {10, 40}, {320, 120}, {448, 250}, {255, 480}, {575, 410}};
 
   mapa *fase_selecionada = vetor_para_lista_circular(mapas, num_mapas);
 
@@ -87,7 +87,7 @@ int main() {
 
     OBJETO lava_enemy = {lava, {0, 0},    0,         0, {0, -1, 0},
                          0,    TILE_SIZE, TILE_SIZE, 0, true,
-                         true, 1}; // <- starts moving up
+                         true, 0}; // <- starts moving up
                                    //
     OBJETO fruits_tile = {fruits,    {0, 0},    0, 0,    {0, 0, 0}, 0,
                           TILE_SIZE, TILE_SIZE, 0, true, true,      0};
@@ -163,8 +163,6 @@ int main() {
       if (event.type == ALLEGRO_EVENT_TIMER) {
 
         // Move lava_enemy
-        lava_enemy.posx += lava_enemy.vec_velocidade.dx;
-        lava_enemy.posy -= lava_enemy.vec_velocidade.dy;
 
         personagem.vec_velocidade.dx = 0;
         personagem.vec_velocidade.dy = 0;
@@ -175,33 +173,44 @@ int main() {
         moving_test_right(keys[ALLEGRO_KEY_RIGHT], &moving, &personagem);
         moving_test_left(keys[ALLEGRO_KEY_LEFT], &moving, &personagem);
 
+        // inimigo nao depende do movimento do jogador
+        colision_With_Enemy(&lava_enemy, &personagem);
+        colision_enemy_scenery(vetorHitbox_wall_tile, wall_tile.quantidade,
+                               &lava_enemy, maxdisplay_w, maxdisplay_h);
+
+        if (lava_enemy.vec_velocidade.dx != 0 ||
+            lava_enemy.vec_velocidade.dy != 0) {
+          normal_vetor(&lava_enemy);
+          lava_enemy.posx += lava_enemy.vec_velocidade.dx;
+          lava_enemy.posy += lava_enemy.vec_velocidade.dy;
+        }
+        // Set a new random direction when stuck
+        // aplicaçao do incremento
+
         limita_mapa(&personagem.posx, &personagem.posy, maxdisplay_w,
                     maxdisplay_h, personagem.sprite_w, personagem.sprite_h);
-
         // frame loop
         if (moving) {
           // normalizacao vetor diagonal
           normal_vetor(&personagem);
 
           colision(vetorHitbox_wall_tile, wall_tile.quantidade, &personagem);
+          colision(vetorHitbox_wall_tile, wall_tile.quantidade, &lava_enemy);
 
           colision_With_Reset(vetorHitbox_lava_tile, lava_tile.quantidade,
                               &personagem);
-          colision_With_Enemy(&lava_enemy, &personagem);
 
           colision_Consumable(vetorHitbox_fruits_tile, fruits_tile.quantidade,
                               &personagem, &fruits_tile);
 
-          // aplicaçao do incremento
+          // muda frames quando anda
+          fps(&frame_counter, &frame, personagem.num_frames);
           if (personagem.vec_velocidade.dx != 0 ||
               personagem.vec_velocidade.dy != 0) {
 
             personagem.posx += personagem.vec_velocidade.dx;
             personagem.posy += personagem.vec_velocidade.dy;
           }
-
-          // muda frames quando anda
-          fps(&frame_counter, &frame, personagem.num_frames);
         }
 
         else {
