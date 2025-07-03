@@ -3,6 +3,7 @@
 /allegro64
 /build
 /CMakeLists.txt
-bin/
+bin/my_program
+bin/images
 .cache/
 .DS_Store
