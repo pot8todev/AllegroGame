@@ -105,6 +105,7 @@ void desenha_Objeto(char mapa[], OBJETO obj, int parametroDeBusca, float sx,
         if (obj.visivel == true)
           al_draw_bitmap_region(obj.sprite, sx, sy, obj.sprite_w, obj.sprite_h,
                                 j * TILE_SIZE, i * TILE_SIZE, 0);
+        obj.quantidade++;
       }
     }
   }

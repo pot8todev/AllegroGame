@@ -77,6 +77,7 @@ int main() {
 
     OBJETO lava_tile = {lava,      {0, 0},    0, 0,    {0, 0, 0}, 0,
                         TILE_SIZE, TILE_SIZE, 0, true, true,      0};
+
     OBJETO fruits_tile = {fruits,    {0, 0},    0, 0,    {0, 0, 0}, 0,
                           TILE_SIZE, TILE_SIZE, 0, true, true,      0};
 
@@ -114,6 +115,7 @@ int main() {
 
     personagem.posx = personagem.inicio.pos_init_x;
     personagem.posy = personagem.inicio.pos_init_y;
+
 
     bool fase_on = true;
     bool moving = false;
@@ -199,7 +201,10 @@ int main() {
                               personagem.sprite_dir * personagem.sprite_h,
                               personagem.sprite_w, personagem.sprite_h,
                               personagem.posx, personagem.posy, 0);
+        
+  
 
+    
         al_flip_display();
       }
       // ------------------------------------------------
@@ -216,7 +221,7 @@ int main() {
     al_destroy_timer(timer);
     al_destroy_event_queue(queue);
     al_destroy_display(disp);
-    printf("\n%d\n", fase_selecionada->num_fase);
+    // printf("\n%d\n", fase_selecionada->num_fase);
   }
   return 0;
 }
