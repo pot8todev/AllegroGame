@@ -1,3 +1,6 @@
+#include "allegro5/bitmap_draw.h"
+#include "allegro5/color.h"
+#include "allegro5/display.h"
 #include "allegro5/keycodes.h"
 #include "functions/colision.h"
 #include "functions/cria_mapa.h"
@@ -31,6 +34,8 @@ int main() {
   char *mapas[] = {"images/fase1.txt", "images/fase2.txt", "images/fase3.txt",
                    "images/fase4.txt", "images/fase5.txt"};
   int num_mapas = sizeof(mapas) / sizeof(mapas[0]);
+  int vetorPosInicioPersonagem[][2] = {
+      {576, 0}, {100, 20}, {200, 405}, {200, 405}, {200, 405}};
   mapa *fase_selecionada = vetor_para_lista_circular(mapas, num_mapas);
 
   bool game_on = true;
@@ -45,6 +50,7 @@ int main() {
     ALLEGRO_BITMAP *floor = al_load_bitmap("images/floor1.png");
     ALLEGRO_BITMAP *lava = al_load_bitmap("images/lava.png");
     ALLEGRO_BITMAP *fruits = al_load_bitmap("images/fruits.png");
+    ALLEGRO_BITMAP *wooden_crate = al_load_bitmap("images/wooden_Crate.png");
 
     bool keys[ALLEGRO_KEY_MAX] = {0};
 
@@ -60,7 +66,7 @@ int main() {
 
     OBJETO objetos[TOTAL_TIPOS_OBJETOS];
     OBJETO personagem = {
-        sprite,    {576, 0},               // POSICAO_INICIAL inicio;
+        sprite,    {0, 0},                 // POSICAO_INICIAL inicio;
         0,         0,         {0, 0, 4.0}, // vec_velocidade
         0,                                 // int sprite_dir;
         TILE_SIZE, TILE_SIZE,
@@ -78,6 +84,15 @@ int main() {
     OBJETO lava_tile = {lava,      {0, 0},    0, 0,    {0, 0, 0}, 0,
                         TILE_SIZE, TILE_SIZE, 0, true, true,      0};
 
+    // TODO wooden_crate  sao inimigos
+    OBJETO wooden_crate_tile = {wooden_crate, {0, 0},    0, 0,    {0, 0, 4}, 0,
+                                TILE_SIZE,    TILE_SIZE, 0, true, true,      0};
+    OBJETO wooden_crate_tile_horizontal = {
+        wooden_crate, {0, 0},    0, 0,    {0, 0, 4}, 0,
+        TILE_SIZE,    TILE_SIZE, 0, true, true,      0};
+    OBJETO wooden_crate_tile_vertical = {
+        wooden_crate, {0, 0},    0, 0,    {0, 0, 4}, 0,
+        TILE_SIZE,    TILE_SIZE, 0, true, true,      0};
     OBJETO fruits_tile = {fruits,    {0, 0},    0, 0,    {0, 0, 0}, 0,
                           TILE_SIZE, TILE_SIZE, 0, true, true,      0};
 
@@ -92,6 +107,9 @@ int main() {
     HITBOX *vetorHitbox_wall_tile = NULL;
     HITBOX *vetorHitbox_lava_tile = NULL;
     HITBOX *vetorHitbox_fruits_tile = NULL;
+    HITBOX *vetorHitbox_wooden_crate_tile = NULL;
+    HITBOX *vetorHitbox_wooden_crate_tile_vertical = NULL;
+    HITBOX *vetorHitbox_wooden_crate_tile_horizontal = NULL;
 
     vetorHitbox_wall_tile =
         inicia_vetorHitbox(fase_selecionada->endereco, &wall_tile, 1);
@@ -99,14 +117,16 @@ int main() {
         inicia_vetorHitbox(fase_selecionada->endereco, &lava_tile, 2);
     vetorHitbox_fruits_tile =
         inicia_vetorHitbox(fase_selecionada->endereco, &fruits_tile, 4);
+    vetorHitbox_wooden_crate_tile =
+        inicia_vetorHitbox(fase_selecionada->endereco, &wooden_crate_tile, 5);
+    vetorHitbox_wooden_crate_tile_vertical = inicia_vetorHitbox(
+        fase_selecionada->endereco, &wooden_crate_tile_vertical, 6);
+    vetorHitbox_wooden_crate_tile_horizontal = inicia_vetorHitbox(
+        fase_selecionada->endereco, &wooden_crate_tile_horizontal, 7);
 
     // posiçåo inicial do personagem em cada fase
-  int vetorPosInicioPersonagem[][2] = {
-      {576, 0}, 
-      {100, 20}, 
-      {200, 405},
-      {200, 405},
-      {200, 405}};
+    int vetorPosInicioPersonagem[][2] = {
+        {576, 0}, {100, 20}, {200, 405}, {200, 405}, {200, 405}};
 
     personagem.inicio.pos_init_x =
         vetorPosInicioPersonagem[fase_selecionada->num_fase][0];
@@ -115,7 +135,6 @@ int main() {
 
     personagem.posx = personagem.inicio.pos_init_x;
     personagem.posy = personagem.inicio.pos_init_y;
-
 
     bool fase_on = true;
     bool moving = false;
@@ -164,9 +183,17 @@ int main() {
           // normalizacao vetor diagonal
           normal_vetor(&personagem);
 
+          lava_tile.posx += lava_tile.vec_velocidade.dx;
+          lava_tile.posy += lava_tile.vec_velocidade.dy;
           colision(vetorHitbox_wall_tile, wall_tile.quantidade, &personagem);
           colision_With_Reset(vetorHitbox_lava_tile, lava_tile.quantidade,
                               &personagem);
+          // colision_With_Reset(vetorHitbox_wooden_crate_tile,
+          //                     lava_tile.quantidade, &personagem);
+          // colision_With_Reset(vetorHitbox_lava_tile, lava_tile.quantidade,
+          //                     &personagem);
+          // colision_With_Reset(vetorHitbox_lava_tile, lava_tile.quantidade,
+          //                     &personagem);
           colision_Consumable(vetorHitbox_fruits_tile, fruits_tile.quantidade,
                               &personagem, &fruits_tile);
 
@@ -186,25 +213,42 @@ int main() {
           frame = 0; // Parado: usa quadro do meio
         }
 
-        al_clear_to_color(al_map_rgb(255, 255, 255));
+        if (personagem.colisao == false) {
+          // al_clear_to_color(al_map_rgb(255, 255, 255));
+          for (int i = 0; i < maxdisplay_h; i += 15) {
 
-        desenha_Objeto(fase_selecionada->endereco, floor_tile, 0, 0, 0);
+            al_draw_filled_circle(maxdisplay_h / 2, maxdisplay_h / 2, i,
+                                  al_map_rgb(100, 100, 200));
+            al_flip_display();
+          }
+          personagem.colisao = true;
+          fase_on = false;
+        } else {
 
-        desenha_Objeto(fase_selecionada->endereco, wall_tile, 1, 0, 0);
-        desenha_Objeto(fase_selecionada->endereco, lava_tile, 2, 0, 0);
-        desenha_Objeto(fase_selecionada->endereco, floor_tile, 4, 0, 0);
-        // TODO usar um outro parametro
-        desenha_Objeto_Consumivel(
-            fase_selecionada->endereco, fruits_tile, vetorHitbox_fruits_tile, 4,
-            rand_fruit_tile_x * TILE_SIZE, rand_fruit_tile_y * TILE_SIZE);
-        al_draw_bitmap_region(sprite, frame * personagem.sprite_w,
-                              personagem.sprite_dir * personagem.sprite_h,
-                              personagem.sprite_w, personagem.sprite_h,
-                              personagem.posx, personagem.posy, 0);
-        
-  
+          al_clear_to_color(al_map_rgb(255, 255, 255));
+          desenha_Objeto(fase_selecionada->endereco, floor_tile, 0, 0, 0);
 
-    
+          desenha_Objeto(fase_selecionada->endereco, wall_tile, 1, 0, 0);
+
+          desenha_Objeto(fase_selecionada->endereco, wooden_crate_tile, 5, 0,
+                         0);
+          desenha_Objeto(fase_selecionada->endereco,
+                         wooden_crate_tile_horizontal, 6, 0, 0);
+          desenha_Objeto(fase_selecionada->endereco, wooden_crate_tile_vertical,
+                         7, 0, 0);
+
+          desenha_Objeto(fase_selecionada->endereco, lava_tile, 2, 0, 0);
+          desenha_Objeto(fase_selecionada->endereco, floor_tile, 4, 0, 0);
+          // TODO usar um outro parametro
+          desenha_Objeto_Consumivel(
+              fase_selecionada->endereco, fruits_tile, vetorHitbox_fruits_tile,
+              4, rand_fruit_tile_x * TILE_SIZE, rand_fruit_tile_y * TILE_SIZE);
+          al_draw_bitmap_region(sprite, frame * personagem.sprite_w,
+                                personagem.sprite_dir * personagem.sprite_h,
+                                personagem.sprite_w, personagem.sprite_h,
+                                personagem.posx, personagem.posy, 0);
+        }
+
         al_flip_display();
       }
       // ------------------------------------------------
@@ -213,6 +257,9 @@ int main() {
     free(vetorHitbox_lava_tile);
     free(vetorHitbox_wall_tile);
     free(vetorHitbox_fruits_tile);
+    free(vetorHitbox_wooden_crate_tile);
+    free(vetorHitbox_wooden_crate_tile_vertical);
+    free(vetorHitbox_wooden_crate_tile_horizontal);
 
     // Limpeza
 
@@ -223,5 +270,6 @@ int main() {
     al_destroy_display(disp);
     // printf("\n%d\n", fase_selecionada->num_fase);
   }
+  free_lista(fase_selecionada);
   return 0;
 }

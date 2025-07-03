@@ -11,3 +11,4 @@ void desenha_Objeto_Consumivel(char mapa[], OBJETO obj, HITBOX *hitbox,
 
 mapa *cria_no(char endereco[50], int num_fase, mapa *proxima_fase);
 mapa *vetor_para_lista_circular(char *vetor_mapas[], int size);
+void free_lista(mapa *mapas);

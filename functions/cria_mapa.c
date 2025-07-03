@@ -6,6 +6,12 @@
 
 // funçao para ajudar alocaçao dinamica de "inicia_vetorHitbox"
 
+void free_lista(mapa *mapas) {
+  if (!mapas)
+    return;
+  free_lista(mapas->proxima_fase); // recursively free the rest
+  free(mapas);                     // then free the current node
+}
 mapa *cria_no(char endereco[50], int num_fase, mapa *proxima_fase) {
   mapa *fase_atual = malloc(sizeof(mapa));
 

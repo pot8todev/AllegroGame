@@ -45,7 +45,7 @@ typedef struct {
   const int sprite_w;
   const int sprite_h;
   const int num_frames;
-  const bool colisao;
+  bool colisao;
   bool visivel;
   int quantidade;
 } OBJETO;

@@ -68,8 +68,8 @@ void colision_With_Reset(HITBOX *objetos, int num_objetos, OBJETO *personagem) {
     bool colidiu_x = testa_colisao(hitbox_pes_x, hitbox_obj);
     bool colidiu_y = testa_colisao(hitbox_pes_y, hitbox_obj);
     if ((colidiu_x || colidiu_y)) { // gameOver
-      personagem->posx = personagem->inicio.pos_init_x;
-      personagem->posy = personagem->inicio.pos_init_y;
+      personagem->colisao = false;
+
       break;
     }
   }
@@ -100,15 +100,17 @@ void colision_Consumable(HITBOX *objetos, int num_objetos, OBJETO *personagem,
 }
 void limita_mapa(float *posx, float *posy, int maxdisplay_w, int maxdisplay_h,
                  int sprite_w, int sprite_h) {
+  const int margin = 12;
+
   // Horizontal
-  if (*posx < -sprite_w)
-    *posx = maxdisplay_w;
-  else if (*posx > maxdisplay_w)
-    *posx = -sprite_w;
+  if (*posx < -sprite_w + margin)
+    *posx = maxdisplay_w - margin;
+  else if (*posx > maxdisplay_w - margin)
+    *posx = -sprite_w + margin;
 
   // Vertical
-  if (*posy < -sprite_h)
-    *posy = maxdisplay_h;
-  else if (*posy > maxdisplay_h)
-    *posy = -sprite_h;
+  if (*posy < -sprite_h + margin)
+    *posy = maxdisplay_h - margin;
+  else if (*posy > maxdisplay_h - margin)
+    *posy = -sprite_h + margin;
 }
