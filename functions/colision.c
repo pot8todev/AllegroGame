@@ -14,6 +14,17 @@ HITBOX create_hitbox(float x, float y, float w, float h) {
   return hb;
 }
 
+HITBOX create_hitbox_scaled(float x, float y, float w, float h, float scale) {
+  HITBOX hb;
+  float scaled_w = w * scale;
+  float scaled_h = h * scale;
+  hb.L = x;
+  hb.R = x + scaled_w;
+  hb.U = y;
+  hb.D = y + scaled_h;
+  return hb;
+}
+
 // Calcula a hitbox dos pés com deslocamento X
 HITBOX get_hitbox_pes_x(const OBJETO *p) {
   return create_hitbox(p->posx + p->vec_velocidade.dx,
@@ -22,7 +33,7 @@ HITBOX get_hitbox_pes_x(const OBJETO *p) {
 }
 
 // Calcula a hitbox dos pés com deslocamento Y
-HITBOX geto_hitbox_pes_y(const OBJETO *p) {
+HITBOX get_hitbox_pes_y(const OBJETO *p) {
   return create_hitbox(
       p->posx, p->posy + p->vec_velocidade.dy + (p->sprite_h - PÉS_ALTURA),
       p->sprite_w, PÉS_ALTURA);
@@ -41,7 +52,7 @@ bool testa_colisao(HITBOX a, HITBOX b) {
 
 void colision(HITBOX *objetosHITBOX, int num_objetos, OBJETO *personagem) {
   HITBOX hitbox_pes_x = get_hitbox_pes_x(personagem);
-  HITBOX hitbox_pes_y = geto_hitbox_pes_y(personagem);
+  HITBOX hitbox_pes_y = get_hitbox_pes_y(personagem);
   for (int i = 0; i < num_objetos; i++) {
 
     HITBOX hitbox_obj = objetosHITBOX[i];
@@ -60,7 +71,8 @@ void colision(HITBOX *objetosHITBOX, int num_objetos, OBJETO *personagem) {
 
 void colision_With_Reset(HITBOX *objetos, int num_objetos, OBJETO *personagem) {
   HITBOX hitbox_pes_x = get_hitbox_pes_x(personagem);
-  HITBOX hitbox_pes_y = geto_hitbox_pes_y(personagem);
+  HITBOX hitbox_pes_y = get_hitbox_pes_y(personagem);
+
   for (int i = 0; i < num_objetos; i++) {
 
     HITBOX hitbox_obj = objetos[i];
@@ -74,11 +86,25 @@ void colision_With_Reset(HITBOX *objetos, int num_objetos, OBJETO *personagem) {
     }
   }
 }
+
+void colision_With_Enemy(OBJETO *lava_enemy, OBJETO *personagem) {
+  HITBOX hitbox_lava_enemy =
+      create_hitbox_scaled(lava_enemy->posx, lava_enemy->posy,
+                           lava_enemy->sprite_w, lava_enemy->sprite_h, 1.0);
+  HITBOX hitbox_personagem =
+      create_hitbox_scaled(personagem->posx, personagem->posy,
+                           personagem->sprite_w, personagem->sprite_h, 1.0);
+
+  bool test = testa_colisao(hitbox_personagem, hitbox_lava_enemy);
+  if (test) { // gameOver
+    personagem->colisao = false;
+  }
+}
 void colision_Consumable(HITBOX *objetos, int num_objetos, OBJETO *personagem,
                          OBJETO *objeto) {
 
   HITBOX hitbox_pes_x = get_hitbox_pes_x(personagem);
-  HITBOX hitbox_pes_y = geto_hitbox_pes_y(personagem);
+  HITBOX hitbox_pes_y = get_hitbox_pes_y(personagem);
 
   for (int i = 0; i < num_objetos; i++) {
     HITBOX hitbox_obj = objetos[i];

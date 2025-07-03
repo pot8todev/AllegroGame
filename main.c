@@ -102,6 +102,7 @@ int main() {
 
     HITBOX *vetorHitbox_wall_tile = NULL;
     HITBOX *vetorHitbox_lava_tile = NULL;
+    HITBOX *vetorHitbox_lava_enemy = NULL;
     HITBOX *vetorHitbox_fruits_tile = NULL;
     HITBOX *vetorHitbox_wooden_crate_tile = NULL;
 
@@ -183,8 +184,11 @@ int main() {
           normal_vetor(&personagem);
 
           colision(vetorHitbox_wall_tile, wall_tile.quantidade, &personagem);
+
           colision_With_Reset(vetorHitbox_lava_tile, lava_tile.quantidade,
                               &personagem);
+          colision_With_Enemy(&lava_enemy, &personagem);
+
           colision_Consumable(vetorHitbox_fruits_tile, fruits_tile.quantidade,
                               &personagem, &fruits_tile);
 
